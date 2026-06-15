@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support-omakase.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;}
+    .omk-vp::-webkit-scrollbar{width:0;height:0;}
+    .omk-vp{scrollbar-width:none;}
+    @keyframes duelCardIn{from{transform:translateX(110px) rotate(2deg);opacity:0;}to{transform:translateX(0) rotate(0);opacity:1;}}
+    @keyframes duelCardOutTop{from{transform:translateX(0) rotate(0);opacity:1;}to{transform:translateX(-170px) rotate(-7deg);opacity:0;}}
+    @keyframes duelCardOutBot{from{transform:translateX(0) rotate(0);opacity:1;}to{transform:translateX(-170px) rotate(7deg);opacity:0;}}
+    @keyframes vsFade{from{opacity:0;}to{opacity:1;}}
+    @keyframes vsFadeOut{from{opacity:1;}to{opacity:0;}}
+  </style>
+</helmet>
+
+<div style="min-height:100vh; background:#E7E8EA; font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+
+  <!-- ===== HEADER ===== -->
+  <div style="display:flex; align-items:center; justify-content:space-between; padding:24px 40px; background:#FFFFFF; border-bottom:1px solid #DCDEE2; position:sticky; top:0; z-index:50;">
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <div style="font-weight:700; font-size:20px; color:#111; letter-spacing:-0.01em;">Omakase's Duel</div>
+      <div style="font-size:13px; color:#8A8E94;">Interactive case-study prototype</div>
+    </div>
+    <div style="display:flex; gap:4px; padding:4px; background:#EEEFF1; border-radius:12px;">
+      <button onClick="{{ goGallery }}" data-tab="gallery" style="padding:10px 24px; border:none; border-radius:8px; cursor:pointer; font-family:Inter,sans-serif; font-size:14px; font-weight:600;">Gallery</button>
+      <button onClick="{{ goProto }}" data-tab="prototype" style="padding:10px 24px; border:none; border-radius:8px; cursor:pointer; font-family:Inter,sans-serif; font-size:14px; font-weight:600;">Prototype</button>
+    </div>
+  </div>
+
+  <!-- ===== GALLERY ===== -->
+  <sc-if value="{{ isGallery }}" hint-placeholder-val="{{ true }}">
+    <div style="padding:48px 40px; display:flex; flex-wrap:wrap; gap:40px 32px; justify-content:center;">
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="EntryScreen" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Entry point</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="DuelScreen" title="{{ d1.title }}" comparing="{{ d1.comparing }}" pills="{{ d1.pills }}" top-card="{{ d1.top }}" bottom-card="{{ d1.bottom }}" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Duel 1 · Veg vs Non-veg</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d2.comparing }}" pills="{{ d2.pills }}" top-card="{{ d2.top }}" bottom-card="{{ d2.bottom }}" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Duel 2 · Meat-Type</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d3.comparing }}" pills="{{ d3.pills }}" top-card="{{ d3.top }}" bottom-card="{{ d3.bottom }}" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Duel 3 · Price</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d4.comparing }}" pills="{{ d4.pills }}" top-card="{{ d4.top }}" bottom-card="{{ d4.bottom }}" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Duel 4 · Spice-level</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d5.comparing }}" pills="{{ d5.pills }}" top-card="{{ d5.top }}" bottom-card="{{ d5.bottom }}" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Duel 5 · Price</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d6.comparing }}" pills="{{ d6.pills }}" top-card="{{ d6.top }}" bottom-card="{{ d6.bottom }}" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Duel 6 · Price</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="WinnerScreen" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Winner</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:707px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:707px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:2120px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="RunnerScreen" hint-size="720px,2120px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Runner-ups</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+        <div style="width:240px; height:533px; border-radius:24px; overflow:hidden; background:#fff; box-shadow:0 12px 32px -12px rgba(0,0,0,0.3); border:1px solid #D7D9DD;"><div style="width:240px; height:533px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.33333); transform-origin:top left;"><dc-import name="StalemateScreen" hint-size="720px,1600px"></dc-import></div></div></div>
+        <span style="font-size:14px; font-weight:600; color:#3A3D42;">Stalemate</span>
+      </div>
+
+    </div>
+  </sc-if>
+
+  <!-- ===== PROTOTYPE ===== -->
+  <sc-if value="{{ isProto }}">
+    <div style="padding:40px; display:flex; flex-direction:column; align-items:center; gap:20px;">
+      <div style="flex-shrink:0; background:#0A0A0A; border-radius:54px; padding:14px; box-shadow:0 40px 80px -30px rgba(0,0,0,0.55);">
+        <div class="omk-vp" style="position:relative; width:360px; height:800px; border-radius:42px; overflow:hidden; background:#fff;">
+
+          <sc-if value="{{ isEntry }}" hint-placeholder-val="{{ true }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="EntryScreen" on-start="{{ goEntryStart }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isDuel1 }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="DuelScreen" title="{{ d1.title }}" comparing="{{ d1.comparing }}" pills="{{ d1.pills }}" top-card="{{ d1.top }}" bottom-card="{{ d1.bottom }}" on-close="{{ goEntry }}" on-top="{{ goDuel2 }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isDuel2 }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d2.comparing }}" pills="{{ d2.pills }}" top-card="{{ d2.top }}" bottom-card="{{ d2.bottom }}" on-close="{{ goEntry }}" on-top="{{ goDuel3 }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isDuel3 }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d3.comparing }}" pills="{{ d3.pills }}" top-card="{{ d3.top }}" bottom-card="{{ d3.bottom }}" on-close="{{ goEntry }}" on-bottom="{{ goDuel4 }}" on-toss="{{ goDuel5 }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isDuel4 }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d4.comparing }}" pills="{{ d4.pills }}" top-card="{{ d4.top }}" bottom-card="{{ d4.bottom }}" on-close="{{ goEntry }}" on-bottom="{{ goWinner }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isDuel5 }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d5.comparing }}" pills="{{ d5.pills }}" top-card="{{ d5.top }}" bottom-card="{{ d5.bottom }}" on-close="{{ goEntry }}" on-toss="{{ goDuel6 }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isDuel6 }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="DuelScreen" comparing="{{ d6.comparing }}" pills="{{ d6.pills }}" top-card="{{ d6.top }}" bottom-card="{{ d6.bottom }}" on-close="{{ goEntry }}" on-toss="{{ goStalemate }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isWinner }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="WinnerScreen" on-close="{{ goEntry }}" on-runners="{{ goRunner }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isRunner }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:1060px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:2120px; transform:scale(0.5); transform-origin:top left;"><dc-import name="RunnerScreen" on-back="{{ goWinner }}" hint-size="720px,2120px"></dc-import></div></div></div></sc-if>
+
+          <sc-if value="{{ isStalemate }}"><div class="omk-vp" style="position:absolute; inset:0; overflow:auto;"><div style="width:360px; height:800px; position:relative;"><div style="position:absolute; top:0; left:0; width:720px; height:1600px; transform:scale(0.5); transform-origin:top left;"><dc-import name="StalemateScreen" on-adjust="{{ goDuel1 }}" on-list="{{ goRunner }}" hint-size="720px,1600px"></dc-import></div></div></div></sc-if>
+
+        </div>
+      </div>
+      <button onClick="{{ goEntry }}" style="padding:12px 28px; border:1px solid #C9CCD1; border-radius:999px; background:#fff; cursor:pointer; font-family:Inter,sans-serif; font-size:14px; font-weight:600; color:#3A3D42;">Restart flow</button>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { tab: "gallery", screen: "entry" };
+
+  componentDidMount() {
+    let tab = "gallery", screen = "entry";
+    try {
+      const t = localStorage.getItem("omk_tab"); if (t) tab = t;
+      const s = localStorage.getItem("omk_duel_screen"); if (s) screen = s;
+    } catch (e) {}
+    if (tab !== "gallery" || screen !== "entry") this.setState({ tab, screen });
+    this._syncTabs(tab);
+  }
+
+  _syncTabs(tab) {
+    document.querySelectorAll("button[data-tab]").forEach(b => {
+      const t = (b.textContent || "").trim().toLowerCase();
+      const active = t === tab;
+      b.style.background = active ? "#FFFFFF" : "transparent";
+      b.style.color = active ? "#111111" : "#7A7E84";
+      b.style.boxShadow = active ? "0 1px 3px rgba(0,0,0,0.12)" : "none";
+    });
+  }
+
+  setTab(tab) {
+    try { localStorage.setItem("omk_tab", tab); } catch (e) {}
+    this._syncTabs(tab);
+    this.setState({ tab });
+  }
+  setScreen(id) {
+    try { localStorage.setItem("omk_duel_screen", id); } catch (e) {}
+    this.setState({ screen: id });
+  }
+
+  renderVals() {
+    const C = {
+      biryani: { img: "assets/chicken-biryani.png", dish: "Chicken Biryani", restaurant: "Charan Foods", time: "30-35 mins", dist: "1.2 Km", price: "₹310", rating: "4.3", tone: "high", count: "by 1K+" },
+      paneer: { img: "assets/andhra-paneer.png", dish: "Andhra Paneer Biryani", restaurant: "Zeeshan", time: "20-25 mins", dist: "2.7 Km", price: "₹320", rating: "3.9", tone: "mid", count: "by 4K+" },
+      mutton: { img: "assets/mutton.png", dish: "Mutton Biryani", restaurant: "Shah Ghouse", time: "20-25 mins", dist: "2.7 Km", price: "₹420", rating: "4.2", tone: "high", count: "by 600+" },
+      dum: { img: "assets/chicken-dum.png", dish: "Chicken Dum Biryani", restaurant: "Meghana Foods", time: "20-25 mins", dist: "2.3 Km", price: "₹260", rating: "4.7", tone: "high", count: "by 5K+" },
+      dum27: { img: "assets/chicken-dum.png", dish: "Chicken Dum Biryani", restaurant: "Meghana Foods", time: "20-25 mins", dist: "2.7 Km", price: "₹260", rating: "4.7", tone: "high", count: "by 5K+" },
+      lucknow: { img: "assets/lucknow.png", dish: "Lucknow Biryani", restaurant: "Uma's Kitchen", time: "30-35 mins", dist: "1.2 Km", price: "₹279", rating: "4.1", tone: "high", count: "by 1.2K+" },
+      fry: { img: "assets/chicken-biryani.png", dish: "Chicken Fry Biryani", restaurant: "Pista house", time: "10-15 mins", dist: "1.2 Km", price: "₹290", rating: "4.4", tone: "high", count: "by 4K+" },
+      juicy: { img: "assets/chicken-biryani.png", dish: "Chicken Juicy Biryani", restaurant: "Mandi Palace", time: "20-25 mins", dist: "1.9 Km", price: "₹259", rating: "4.2", tone: "high", count: "by 1K+" }
+    };
+    const s = this.state.screen;
+    const go = id => () => this.setScreen(id);
+    return {
+      isGallery: this.state.tab === "gallery",
+      isProto: this.state.tab === "prototype",
+      goGallery: () => this.setTab("gallery"),
+      goProto: () => this.setTab("prototype"),
+
+      d1: { title: "Omakase's Duel", comparing: "Veg vs Non-veg", pills: [], top: C.biryani, bottom: C.paneer },
+      d2: { comparing: "Meat-Type", pills: ["nonveg"], top: C.biryani, bottom: C.mutton },
+      d3: { comparing: "Price", pills: ["nonveg"], top: C.biryani, bottom: C.dum },
+      d4: { comparing: "Spice-level", pills: ["nonveg", "budget"], top: C.lucknow, bottom: C.dum27 },
+      d5: { comparing: "Price", pills: ["nonveg"], top: C.fry, bottom: C.dum },
+      d6: { comparing: "Price", pills: ["nonveg"], top: C.juicy, bottom: C.dum },
+
+      goEntry: go("entry"), goEntryStart: go("duel1"),
+      goDuel1: go("duel1"), goDuel2: go("duel2"), goDuel3: go("duel3"),
+      goDuel4: go("duel4"), goDuel5: go("duel5"), goDuel6: go("duel6"),
+      goWinner: go("winner"), goRunner: go("runner"), goStalemate: go("stalemate"),
+
+      isEntry: s === "entry", isDuel1: s === "duel1", isDuel2: s === "duel2", isDuel3: s === "duel3",
+      isDuel4: s === "duel4", isDuel5: s === "duel5", isDuel6: s === "duel6",
+      isWinner: s === "winner", isRunner: s === "runner", isStalemate: s === "stalemate"
+    };
+  }
+}
+</script>
+</body>
+</html>

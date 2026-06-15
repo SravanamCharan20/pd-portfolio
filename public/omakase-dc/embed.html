@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support-omakase.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow: hidden; background: transparent; }
+  @keyframes duelCardIn { from { transform: translateX(110px) rotate(2deg); opacity: 0; } to { transform: translateX(0) rotate(0); opacity: 1; } }
+  @keyframes duelCardOutTop { from { transform: translateX(0) rotate(0); opacity: 1; } to { transform: translateX(-170px) rotate(-7deg); opacity: 0; } }
+  @keyframes duelCardOutBot { from { transform: translateX(0) rotate(0); opacity: 1; } to { transform: translateX(-170px) rotate(7deg); opacity: 0; } }
+  @keyframes vsFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes vsFadeOut { from { opacity: 1; } to { opacity: 0; } }
+</style>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</helmet>
+
+<div style="width:100vw; height:100vh; display:flex; justify-content:center; align-items:flex-start; overflow:hidden;">
+  <div style="width:{{ vw }}px; height:{{ vh }}px; position:relative; overflow:hidden; flex-shrink:0;">
+    <div style="position:absolute; top:0; left:0; width:{{ ow }}px; height:{{ oh }}px; transform:scale({{ sc }}); transform-origin:top left;">
+
+      <sc-if value="{{ isEntry }}">
+        <dc-import name="EntryScreen" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isDuel1 }}">
+        <dc-import name="DuelScreen" title="{{ d1.title }}" comparing="{{ d1.comparing }}" pills="{{ d1.pills }}" top-card="{{ d1.top }}" bottom-card="{{ d1.bottom }}" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isDuel2 }}">
+        <dc-import name="DuelScreen" comparing="{{ d2.comparing }}" pills="{{ d2.pills }}" top-card="{{ d2.top }}" bottom-card="{{ d2.bottom }}" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isDuel3 }}">
+        <dc-import name="DuelScreen" comparing="{{ d3.comparing }}" pills="{{ d3.pills }}" top-card="{{ d3.top }}" bottom-card="{{ d3.bottom }}" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isDuel4 }}">
+        <dc-import name="DuelScreen" comparing="{{ d4.comparing }}" pills="{{ d4.pills }}" top-card="{{ d4.top }}" bottom-card="{{ d4.bottom }}" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isDuel5 }}">
+        <dc-import name="DuelScreen" comparing="{{ d5.comparing }}" pills="{{ d5.pills }}" top-card="{{ d5.top }}" bottom-card="{{ d5.bottom }}" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isDuel6 }}">
+        <dc-import name="DuelScreen" comparing="{{ d6.comparing }}" pills="{{ d6.pills }}" top-card="{{ d6.top }}" bottom-card="{{ d6.bottom }}" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isWinner }}">
+        <dc-import name="WinnerScreen" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isStalemate }}">
+        <dc-import name="StalemateScreen" hint-size="720px,1600px"></dc-import>
+      </sc-if>
+
+      <sc-if value="{{ isRunner }}">
+        <dc-import name="RunnerScreen" hint-size="720px,2120px"></dc-import>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    const params = new URLSearchParams(window.location.search);
+    const screen = params.get("screen") || "entry";
+
+    const ow = 720, oh = screen === "runner" ? 2120 : 1600;
+    const sc = window.innerWidth / ow;
+    const vw = window.innerWidth;
+    const vh = oh * sc;
+
+    const C = {
+      biryani:  { img:"assets/chicken-biryani.png", dish:"Chicken Biryani",       restaurant:"Charan Foods",  time:"30-35 mins", dist:"1.2 Km", price:"₹310", rating:"4.3", tone:"high", count:"by 1K+"  },
+      paneer:   { img:"assets/andhra-paneer.png",   dish:"Andhra Paneer Biryani", restaurant:"Zeeshan",       time:"20-25 mins", dist:"2.7 Km", price:"₹320", rating:"3.9", tone:"mid",  count:"by 4K+"  },
+      mutton:   { img:"assets/mutton.png",          dish:"Mutton Biryani",        restaurant:"Shah Ghouse",   time:"20-25 mins", dist:"2.7 Km", price:"₹420", rating:"4.2", tone:"high", count:"by 600+" },
+      dum:      { img:"assets/chicken-dum.png",      dish:"Chicken Dum Biryani",   restaurant:"Meghana Foods", time:"20-25 mins", dist:"2.3 Km", price:"₹260", rating:"4.7", tone:"high", count:"by 5K+"  },
+      dum27:    { img:"assets/chicken-dum.png",      dish:"Chicken Dum Biryani",   restaurant:"Meghana Foods", time:"20-25 mins", dist:"2.7 Km", price:"₹260", rating:"4.7", tone:"high", count:"by 5K+"  },
+      lucknow:  { img:"assets/lucknow.png",          dish:"Lucknow Biryani",       restaurant:"Uma's Kitchen", time:"30-35 mins", dist:"1.2 Km", price:"₹279", rating:"4.1", tone:"high", count:"by 1.2K+" },
+      fry:      { img:"assets/chicken-biryani.png",  dish:"Chicken Fry Biryani",   restaurant:"Pista house",   time:"10-15 mins", dist:"1.2 Km", price:"₹290", rating:"4.4", tone:"high", count:"by 4K+"  },
+      juicy:    { img:"assets/chicken-biryani.png",  dish:"Chicken Juicy Biryani", restaurant:"Mandi Palace",  time:"20-25 mins", dist:"1.9 Km", price:"₹259", rating:"4.2", tone:"high", count:"by 1K+"  }
+    };
+
+    return {
+      ow, oh, sc, vw, vh,
+      isEntry:     screen === "entry",
+      isDuel1:     screen === "duel1",
+      isDuel2:     screen === "duel2",
+      isDuel3:     screen === "duel3",
+      isDuel4:     screen === "duel4",
+      isDuel5:     screen === "duel5",
+      isDuel6:     screen === "duel6",
+      isWinner:    screen === "winner",
+      isStalemate: screen === "stalemate",
+      isRunner:    screen === "runner",
+
+      d1: { title:"Omakase's Duel", comparing:"Veg vs Non-veg", pills:[], top:C.biryani, bottom:C.paneer },
+      d2: { comparing:"Meat-Type",   pills:["nonveg"], top:C.biryani, bottom:C.mutton },
+      d3: { comparing:"Price",       pills:["nonveg"], top:C.biryani, bottom:C.dum    },
+      d4: { comparing:"Spice-level", pills:["nonveg","budget"], top:C.lucknow, bottom:C.dum27 },
+      d5: { comparing:"Price",       pills:["nonveg"], top:C.fry,   bottom:C.dum     },
+      d6: { comparing:"Price",       pills:["nonveg"], top:C.juicy, bottom:C.dum     }
+    };
+  }
+}
+</script>
+</body>
+</html>

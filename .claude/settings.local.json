@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/sravanamcharan/Downloads -name \"TTD*\" -o -name \"support*\" 2>/dev/null | head -20)",
+      "Bash(find /Users/sravanamcharan -maxdepth 3 -name \"TTD*Darshan*\" -o -name \"support.js\" 2>/dev/null | grep -v node_modules | grep -v \".Trash\" | head -20)"
+    ]
+  }
+}

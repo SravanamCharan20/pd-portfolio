@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative; width:720px; height:1600px; background:#FFFFFF; font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; overflow:hidden;">
+
+  <div style="position:absolute; left:24px; top:24px; width:672px; height:28px;">
+    <dc-import name="StatusBar" style="width:672px; height:28px;" hint-size="672px,28px"></dc-import>
+  </div>
+
+  <div style="position:absolute; left:0; top:360px; width:720px; box-sizing:border-box; padding:0 64px; display:flex; flex-direction:column; align-items:center; gap:32px;">
+    <img src="assets/forks.png" alt="" style="width:472px; height:420px; object-fit:contain;">
+    <div style="width:576px; text-align:center; font-weight:600; font-size:48px; line-height:56px; letter-spacing:-0.01em; color:#000;">You've got taste that's tough to pin down.</div>
+    <div style="width:384px; text-align:center; font-weight:600; font-size:32px; line-height:36px; color:#7A7E81;">Let's tweak the search and try again.</div>
+    <div onClick="{{ onAdjust }}" style="margin-top:8px; width:328px; height:80px; border-radius:16px; background:#fff; box-shadow:inset 0 0 0 2px #F04F5F; display:flex; gap:16px; align-items:center; justify-content:center; cursor:{{ adjustCur }};">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><g stroke="#F04F5F" stroke-width="3" stroke-linecap="round"><line x1="2" y1="9" x2="30" y2="9"></line><line x1="2" y1="16" x2="30" y2="16"></line><line x1="2" y1="23" x2="30" y2="23"></line></g><circle cx="22" cy="9" r="4.5" fill="#fff" stroke="#F04F5F" stroke-width="3"></circle><circle cx="10" cy="16" r="4.5" fill="#fff" stroke="#F04F5F" stroke-width="3"></circle><circle cx="23" cy="23" r="4.5" fill="#fff" stroke="#F04F5F" stroke-width="3"></circle></svg>
+      <span style="color:#F04F5F; font-weight:600; font-size:30px; letter-spacing:-0.01em;">Adjust Search</span>
+    </div>
+    <div onClick="{{ onList }}" style="width:576px; text-align:center; font-weight:600; font-size:32px; color:#7A7E81; cursor:{{ listCur }};">Just show me the list</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:720,&quot;height&quot;:1600}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return {
+      onAdjust: p.onAdjust || (() => {}),
+      onList: p.onList || (() => {}),
+      adjustCur: p.onAdjust ? "pointer" : "default",
+      listCur: p.onList ? "pointer" : "default"
+    };
+  }
+}
+</script>
+</body>
+</html>

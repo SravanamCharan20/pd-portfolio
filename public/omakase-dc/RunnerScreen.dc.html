@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative; width:720px; height:2120px; background:#FFFFFF; font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; overflow:hidden;">
+
+  <div style="position:absolute; left:24px; top:24px; width:672px; height:28px;">
+    <dc-import name="StatusBar" style="width:672px; height:28px;" hint-size="672px,28px"></dc-import>
+  </div>
+
+  <svg width="248" height="208" viewBox="0 0 220 185" style="position:absolute; left:474px; top:80px; transform:rotate(9deg); opacity:0.5;">
+    <g stroke="#F04F5F" stroke-width="7" stroke-linecap="round"><line x1="110" y1="6" x2="110" y2="24"></line><line x1="80" y1="16" x2="90" y2="32"></line><line x1="140" y1="16" x2="130" y2="32"></line><line x1="56" y1="40" x2="73" y2="45"></line><line x1="164" y1="40" x2="147" y2="45"></line></g>
+    <path d="M72 86 L72 60 L90 73 L110 54 L130 73 L148 60 L148 86 Z" fill="#F04F5F"></path>
+    <rect x="69" y="80" width="82" height="13" fill="#F04F5F"></rect>
+    <g fill="none" stroke="#F04F5F" stroke-width="8"><rect x="50" y="124" width="40" height="46"></rect><rect x="90" y="96" width="40" height="74"></rect><rect x="130" y="138" width="40" height="32"></rect></g>
+    <g fill="#F04F5F" font-family="Inter,sans-serif" font-weight="800" font-size="26" text-anchor="middle"><text x="70" y="157">2</text><text x="110" y="143">1</text><text x="150" y="162">3</text></g>
+  </svg>
+
+  <div onClick="{{ onBack }}" style="position:absolute; left:24px; top:96px; width:88px; height:88px; border-radius:999px; background:#fff; box-shadow:0 0 4px rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; cursor:{{ backCur }};">
+    <svg width="20" height="38" viewBox="0 0 20 38" fill="none"><path d="M 20 35.626 L 17.677 38 L 0.639 20.587 C 0.229 20.162 0 19.592 0 19 C 0 18.408 0.229 17.838 0.639 17.413 L 17.677 0 L 20 2.376 L 3.735 19 L 20 35.626 Z" fill="#000"></path></svg>
+  </div>
+  <span style="position:absolute; left:216px; top:112px; font-weight:600; font-size:44px; line-height:52px; letter-spacing:-0.03em; color:#000;">Runner-ups</span>
+
+  <div style="position:absolute; left:0; top:240px; width:720px; box-sizing:border-box; padding:0 24px; display:flex; flex-direction:column; gap:24px;">
+    <dc-import name="DuelCard" order="true" img="assets/lucknow.png" dish="Lucknow Biryani" restaurant="Uma's kitchen" time="30-35 mins" dist="1.2 Km" price="₹279" rating="4.1" tone="high" count="by 1.2K+" style="width:672px; height:585px;" hint-size="672px,585px"></dc-import>
+    <dc-import name="DuelCard" order="true" img="assets/chicken-lollipop.png" dish="Chicken Lollipop Biryani" restaurant="Charan Foods" time="30-35 mins" dist="2.2 Km" price="₹289" rating="2.9" tone="low" count="by 900+" style="width:672px; height:585px;" hint-size="672px,585px"></dc-import>
+    <dc-import name="DuelCard" order="true" img="assets/chicken-biryani.png" dish="Chicken Biryani" restaurant="Charan Foods" time="30-35 mins" dist="1.2 Km" price="₹310" rating="4.3" tone="high" count="by 1K+" style="width:672px; height:585px;" hint-size="672px,585px"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:720,&quot;height&quot;:2120}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return { onBack: p.onBack || (() => {}), backCur: p.onBack ? "pointer" : "default" };
+  }
+}
+</script>
+</body>
+</html>
