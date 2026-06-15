@@ -31,6 +31,7 @@ const sections = [
 function TTDCaseStudy() {
   const [active, setActive] = useState("overview");
   const refs = useRef<Record<string, HTMLElement | null>>({});
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -63,13 +64,53 @@ function TTDCaseStudy() {
 
       <div className="bg-background min-h-screen">
         {/* NAV */}
-        <header className="px-8 md:px-16 py-8 flex items-center justify-between">
+        <header className="px-8 md:px-16 py-8 flex items-center">
           <a href="/" className="font-display text-xl font-medium">Charan</a>
-          <nav className="flex items-center gap-10 text-sm text-ink-soft">
-            <a href="/#work" className="hover:text-ink transition-colors">Work</a>
+
+          <nav className="hidden md:flex items-center gap-10 text-sm text-ink-soft ml-6">
+            <a href="/#!work" className="hover:text-ink transition-colors">Work</a>
             <a href="/about" className="hover:text-ink transition-colors">About</a>
-            <a href="/#contact" className="hover:text-ink transition-colors">Contact</a>
+            <a href="/contact" className="hover:text-ink transition-colors">Contact</a>
           </nav>
+
+          <button className="md:hidden ml-auto p-2" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          {menuOpen && (
+            <div className="fixed inset-0 z-50 md:hidden flex items-end" role="dialog" aria-modal="true" aria-label="Main menu">
+              <button
+                className="absolute inset-0 bg-black/60"
+                onClick={() => setMenuOpen(false)}
+                aria-hidden="true"
+              />
+
+              <div
+                className="bg-white text-black w-full rounded-t-2xl p-6"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  transform: menuOpen ? "translateY(0%)" : "translateY(100%)",
+                  transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <a href="/" className="font-display text-lg">Charan</a>
+                  <button onClick={() => setMenuOpen(false)} aria-label="Close menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                <nav className="flex flex-col gap-4">
+                  <a href="/#!work" className="text-lg">Work</a>
+                  <a href="/about" className="text-lg">About</a>
+                  <a href="/contact" className="text-lg">Contact</a>
+                </nav>
+              </div>
+            </div>
+          )}
         </header>
 
         {/* HERO */}
