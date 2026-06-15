@@ -20,9 +20,10 @@
 </style>
 </helmet>
 
-<div style="min-height:100vh;background:#ECEFF1;color:#212121">
+<div style="{{ rootStyle }}">
 
   <!-- ===== TOOLBAR ===== -->
+  <sc-if value="{{ showToolbar }}">
   <div style="position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #DDE1E6;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;box-shadow:0 1px 8px rgba(0,0,0,.04)">
     <sc-if value="{{ showTitle }}" hint-placeholder-val="{{ true }}">
     <div style="display:flex;align-items:center;gap:12px">
@@ -47,13 +48,14 @@
       </div>
     </div>
   </div>
+  </sc-if>
 
   <!-- ===== STRIP OF SCREENS ===== -->
   <div style="{{ stripStyle }}">
 
     <!-- 1 · MENU -->
     <div style="{{ cardStyles.menu }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">01 · Services menu <span style="color:#9AA0A8;font-weight:500">— new entry + first-time banner</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">01 · Services menu <span style="color:#9AA0A8;font-weight:500">— new entry + first-time banner</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0">
           <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div>
@@ -131,7 +133,7 @@
 
     <!-- 2 · MY PILGRIMS — EMPTY -->
     <div style="{{ cardStyles.pilEmpty }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">02 · My Pilgrims <span style="color:#9AA0A8;font-weight:500">— empty state (first-time user)</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">02 · My Pilgrims <span style="color:#9AA0A8;font-weight:500">— empty state (first-time user)</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0">
           <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div>
@@ -151,7 +153,7 @@
 
     <!-- 3 · MY PILGRIMS — LIST -->
     <div style="{{ cardStyles.pilList }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">03 · My Pilgrims <span style="color:#9AA0A8;font-weight:500">— saved list (incl. active booking)</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">03 · My Pilgrims <span style="color:#9AA0A8;font-weight:500">— saved list (incl. active booking)</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0">
           <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div>
@@ -192,7 +194,7 @@
 
     <!-- 4 · ADD PILGRIM -->
     <div style="{{ cardStyles.add }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">04 · Add Pilgrim <span style="color:#9AA0A8;font-weight:500">— calm pre-booking form</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">04 · Add Pilgrim <span style="color:#9AA0A8;font-weight:500">— calm pre-booking form</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0">
           <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div>
@@ -246,7 +248,7 @@
 
     <!-- 5 · SELECT PILGRIMS (HERO) -->
     <div style="{{ cardStyles.select }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#E91E63;margin-bottom:12px;padding-left:4px">05 · Select Pilgrims <span style="color:#C76A8C;font-weight:500">— the hero: tap pills, not typing</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#E91E63;margin-bottom:12px;padding-left:4px">05 · Select Pilgrims <span style="color:#C76A8C;font-weight:500">— the hero: tap pills, not typing</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0">
           <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div>
@@ -315,7 +317,7 @@
 
     <!-- 6 · SLOT PAGE + CONFIRM LOCK SHEET -->
     <div style="{{ cardStyles.slot }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">06 · Slot page <span style="color:#9AA0A8;font-weight:500">— existing page + Confirm Slot Lock sheet</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">06 · Slot page <span style="color:#9AA0A8;font-weight:500">— existing page + Confirm Slot Lock sheet</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0">
           <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div>
@@ -349,7 +351,7 @@
 
     <!-- 7 · PAYMENT HOLD — LIVE / DEFAULT -->
     <div style="{{ cardStyles.payDefault }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">07 · Payment Hold <span style="color:#9AA0A8;font-weight:500">— live 3-min timer (watch it run)</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">07 · Payment Hold <span style="color:#9AA0A8;font-weight:500">— live 3-min timer (watch it run)</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0">
           <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div>
@@ -401,7 +403,7 @@
 
     <!-- 8 · PAYMENT HOLD — TIMER CRITICAL -->
     <div style="{{ cardStyles.payWarn }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">08 · Payment Hold <span style="color:#9AA0A8;font-weight:500">— timer under 30s (critical)</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">08 · Payment Hold <span style="color:#9AA0A8;font-weight:500">— timer under 30s (critical)</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:01</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;justify-content:center"><span style="font-size:17px;font-weight:600">Complete Payment</span></div></div>
         <div style="padding:16px 16px 8px;flex-shrink:0">
@@ -434,7 +436,7 @@
 
     <!-- 9 · UPI REDIRECT OVERLAY -->
     <div style="{{ cardStyles.upiRedirect }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">09 · UPI redirect <span style="color:#9AA0A8;font-weight:500">— opening external app</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">09 · UPI redirect <span style="color:#9AA0A8;font-weight:500">— opening external app</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:01</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;justify-content:center"><span style="font-size:17px;font-weight:600">Complete Payment</span></div></div>
         <div style="padding:16px 16px 8px;flex-shrink:0;opacity:.5"><div style="height:8px;border-radius:4px;background:#E0E0E0;overflow:hidden"><div style="height:100%;width:60%;background:#673AB7;border-radius:4px"></div></div><div style="text-align:right;font-size:16px;font-weight:700;color:#212121;margin-top:8px">1:48 remaining</div></div>
@@ -450,7 +452,7 @@
 
     <!-- 10 · WAITING FOR CONFIRMATION -->
     <div style="{{ cardStyles.waiting }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">10 · Waiting <span style="color:#9AA0A8;font-weight:500">— awaiting confirmation / retry fallback</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">10 · Waiting <span style="color:#9AA0A8;font-weight:500">— awaiting confirmation / retry fallback</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:02</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;justify-content:center"><span style="font-size:17px;font-weight:600">Complete Payment</span></div></div>
         <div style="padding:16px 16px 8px;flex-shrink:0"><div style="height:8px;border-radius:4px;background:#E0E0E0;overflow:hidden"><div style="height:100%;width:42%;background:#673AB7;border-radius:4px"></div></div><div style="text-align:right;font-size:16px;font-weight:700;color:#212121;margin-top:8px">1:16 remaining</div></div>
@@ -466,7 +468,7 @@
 
     <!-- 11 · PAYMENT FAILED (SLOT HELD) -->
     <div style="{{ cardStyles.payFail }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">11 · Payment failed <span style="color:#9AA0A8;font-weight:500">— slot still held, retry / switch</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">11 · Payment failed <span style="color:#9AA0A8;font-weight:500">— slot still held, retry / switch</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:02</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;justify-content:center"><span style="font-size:17px;font-weight:600">Complete Payment</span></div></div>
         <div style="padding:16px 16px 8px;flex-shrink:0"><div style="height:8px;border-radius:4px;background:#E0E0E0;overflow:hidden"><div style="height:100%;width:33%;background:#673AB7;border-radius:4px"></div></div><div style="text-align:right;font-size:16px;font-weight:700;color:#212121;margin-top:8px">0:58 remaining</div></div>
@@ -484,7 +486,7 @@
 
     <!-- 12 · PAYMENT SUCCESSFUL -->
     <div style="{{ cardStyles.paySuccess }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#2E7D32;margin-bottom:12px;padding-left:4px">12 · Booking confirmed <span style="color:#7DAE80;font-weight:500">— success state</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#2E7D32;margin-bottom:12px;padding-left:4px">12 · Booking confirmed <span style="color:#7DAE80;font-weight:500">— success state</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:02</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;justify-content:center"><span style="font-size:17px;font-weight:600">Booking Confirmed</span></div></div>
         <div style="flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:36px 28px 24px;text-align:center">
@@ -505,7 +507,7 @@
 
     <!-- 13 · TIMER EXPIRED — QUEUE OPEN -->
     <div style="{{ cardStyles.expiredOpen }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">13 · Hold expired <span style="color:#9AA0A8;font-weight:500">— queue still open, re-enter</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">13 · Hold expired <span style="color:#9AA0A8;font-weight:500">— queue still open, re-enter</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:03</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;justify-content:center"><span style="font-size:17px;font-weight:600">Slot Released</span></div></div>
         <div style="padding:16px 16px 8px;flex-shrink:0"><div style="height:8px;border-radius:4px;background:#E0E0E0;overflow:hidden"></div><div style="text-align:right;font-size:16px;font-weight:700;color:#F44336;margin-top:8px">0:00</div></div>
@@ -519,7 +521,7 @@
 
     <!-- 14 · TIMER EXPIRED — QUEUE CLOSED -->
     <div style="{{ cardStyles.expiredClosed }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">14 · Hold expired <span style="color:#9AA0A8;font-weight:500">— queue closed, next release</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">14 · Hold expired <span style="color:#9AA0A8;font-weight:500">— queue closed, next release</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:03</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;justify-content:center"><span style="font-size:17px;font-weight:600">Slot Released</span></div></div>
         <div style="padding:16px 16px 8px;flex-shrink:0"><div style="height:8px;border-radius:4px;background:#E0E0E0;overflow:hidden"></div><div style="text-align:right;font-size:16px;font-weight:700;color:#F44336;margin-top:8px">0:00</div></div>
@@ -534,7 +536,7 @@
 
     <!-- 15 · WEBHOOK PENDING AT EXPIRY -->
     <div style="{{ cardStyles.webhook }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">15 · Webhook pending <span style="color:#9AA0A8;font-weight:500">— payment processing at expiry</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">15 · Webhook pending <span style="color:#9AA0A8;font-weight:500">— payment processing at expiry</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:03</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;justify-content:center"><span style="font-size:17px;font-weight:600">Payment Processing</span></div></div>
         <div style="flex:1;overflow:auto;padding:24px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center">
@@ -548,7 +550,7 @@
 
     <!-- 16 · INACTIVITY MODAL -->
     <div style="{{ cardStyles.inactivity }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">16 · Inactivity prompt <span style="color:#9AA0A8;font-weight:500">— 5-min timeout modal on slot page</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">16 · Inactivity prompt <span style="color:#9AA0A8;font-weight:500">— 5-min timeout modal on slot page</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:05</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;gap:16px;padding:0 16px"><span style="font-size:22px">←</span><span style="font-size:17px;font-weight:600">Select Slot · 11 July</span></div></div>
         <div style="flex:1;padding:16px;filter:blur(2px);opacity:.5"><div style="border:1px solid #E0E0E0;border-radius:12px;padding:16px;margin-bottom:12px;height:70px"></div><div style="border:1px solid #E0E0E0;border-radius:12px;padding:16px;height:70px"></div></div>
@@ -565,7 +567,7 @@
 
     <!-- 17 · DELETE CONFIRM -->
     <div style="{{ cardStyles.deleteDlg }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">17 · Remove pilgrim <span style="color:#9AA0A8;font-weight:500">— delete confirmation dialog</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">17 · Remove pilgrim <span style="color:#9AA0A8;font-weight:500">— delete confirmation dialog</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;gap:16px;padding:0 16px"><span style="font-size:22px">←</span><span style="font-size:17px;font-weight:600">My Pilgrims</span></div></div>
         <div style="flex:1;padding:16px;filter:blur(2px);opacity:.5"><div style="border:1px solid #E0E0E0;border-radius:12px;padding:16px;margin-bottom:12px;height:84px"></div><div style="border:1px solid #E0E0E0;border-radius:12px;padding:16px;height:84px"></div></div>
@@ -582,7 +584,7 @@
 
     <!-- 18 · CONSTRAINT INFO SHEET -->
     <div style="{{ cardStyles.constraintInfo }}">
-      <sc-if value="{{ galleryMode }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">18 · Constraint info <span style="color:#9AA0A8;font-weight:500">— why a pilgrim is blocked</span></div></sc-if>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#5A6069;margin-bottom:12px;padding-left:4px">18 · Constraint info <span style="color:#9AA0A8;font-weight:500">— why a pilgrim is blocked</span></div></sc-if>
       <div style="width:375px;height:780px;background:#fff;border-radius:18px;border:1px solid #DDE1E6;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px rgba(40,20,80,.08)">
         <div style="background:#4A148C;color:#fff;flex-shrink:0"><div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px"><span style="font-weight:600">10:00</span><span style="display:flex;align-items:center;gap:8px"><b style="font-weight:700;font-size:10px">5G</b><span style="display:inline-block;width:20px;height:11px;border:1px solid #fff;border-radius:2px;position:relative"><span style="position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:#fff;border-radius:1px"></span></span></span></div><div style="height:56px;display:flex;align-items:center;gap:16px;padding:0 16px"><span style="font-size:22px">←</span><span style="font-size:17px;font-weight:600">Select Pilgrims</span></div></div>
         <div style="flex:1;padding:16px;filter:blur(2px);opacity:.5"><div style="height:18px;width:60%;background:#E5E5EA;border-radius:5px;margin-bottom:20px"></div><div style="display:flex;gap:12px;flex-wrap:wrap"><div style="height:44px;width:150px;border:1px solid #E0E0E0;border-radius:22px"></div><div style="height:44px;width:140px;border:1px solid #E0E0E0;border-radius:22px"></div></div></div>
@@ -599,7 +601,7 @@
 
   </div>
 
-  <div style="height:40px"></div>
+  <sc-if value="{{ showSpacing }}"><div style="height:40px"></div></sc-if>
 </div>
 
 </x-dc>
@@ -607,6 +609,7 @@
 class Component extends DCLogic {
   _embedMode = new URLSearchParams(window.location.search).has('embed');
   _embedScreens = (() => { const p = new URLSearchParams(window.location.search).get('screens'); return p ? p.split(',') : null; })();
+  _bareMode = new URLSearchParams(window.location.search).has('bare');
 
   state = {
     viewMode: 'gallery',
@@ -663,9 +666,11 @@ class Component extends DCLogic {
     });
 
     // strip + tabs
-    const stripStyle = gallery
-      ? { display:'flex', flexWrap:'wrap', gap:'36px 32px', justifyContent:'center', padding:'32px 24px 12px', alignItems:'flex-start' }
-      : { display:'flex', justifyContent:'center', padding:'28px 16px 12px' };
+    const stripStyle = this._bareMode
+      ? { display:'flex', justifyContent:'center', padding:'0' }
+      : gallery
+        ? { display:'flex', flexWrap:'wrap', gap:'36px 32px', justifyContent:'center', padding:'32px 24px 12px', alignItems:'flex-start' }
+        : { display:'flex', justifyContent:'center', padding:'28px 16px 12px' };
     const tabOn = { border:'none', borderRadius:'6px', padding:'8px 16px', fontSize:'13px', fontWeight:'700', cursor:'pointer', background:'#fff', color:'#4A148C', boxShadow:'0 1px 3px rgba(0,0,0,.12)' };
     const tabOff = { border:'none', borderRadius:'6px', padding:'8px 16px', fontSize:'13px', fontWeight:'600', cursor:'pointer', background:'transparent', color:'#8A8F97' };
 
@@ -735,6 +740,10 @@ class Component extends DCLogic {
     }));
 
     return {
+      rootStyle: { minHeight: '100vh', background: this._bareMode ? '#fff' : '#ECEFF1', color: '#212121' },
+      showToolbar: !this._bareMode,
+      showLabels: gallery && !this._bareMode,
+      showSpacing: !this._bareMode,
       showTitle: !this._embedMode,
       galleryMode: gallery,
       deviceMode: device,

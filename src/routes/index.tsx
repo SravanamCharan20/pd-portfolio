@@ -67,6 +67,41 @@ function Index() {
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=La+Belle+Aurore&display=swap" />
 
+      {/* Mobile bottom-sheet menu — outside backdrop-blur to avoid containment bug */}
+      <div
+        className={`fixed inset-0 z-[100] md:hidden flex items-end ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        role="dialog"
+        aria-modal={menuOpen}
+        aria-label="Main menu"
+      >
+        <button
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${menuOpen ? "opacity-60" : "opacity-0"}`}
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+          tabIndex={menuOpen ? 0 : -1}
+        />
+        <div
+          className={`relative w-full bg-white text-black rounded-t-3xl p-6 pb-10 transition-transform duration-500 ${menuOpen ? "translate-y-0" : "translate-y-full"}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-10 h-1 bg-black/20 rounded-full mx-auto mb-6" />
+          <div className="flex items-center justify-between mb-8">
+            <a href="/" className="font-display text-lg font-medium">Charan</a>
+            <button onClick={() => setMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+          <nav className="flex flex-col gap-5">
+            <a href="/#work" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Work</a>
+            <a href="/about" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">About</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Contact</a>
+          </nav>
+        </div>
+      </div>
+
       {/* Scrollable content sits above sticky footer */}
       <div className="relative z-10 hero-page" style={{ marginBottom: "100vh" }}>
         <div className="sticky top-0 z-999 bg-background/10 backdrop-blur-md border-b border-border">
@@ -85,38 +120,6 @@ function Index() {
               </svg>
             </button>
 
-            {menuOpen && (
-              <div className="fixed inset-0 z-50 md:hidden flex items-end" role="dialog" aria-modal="true" aria-label="Main menu">
-                <button
-                  className="absolute inset-0 bg-black/60"
-                  onClick={() => setMenuOpen(false)}
-                  aria-hidden="true"
-                />
-
-                <div
-                  className="bg-white text-black w-full rounded-t-2xl p-6"
-                  onClick={(e) => e.stopPropagation()}
-                  style={{
-                    transform: menuOpen ? "translateY(0%)" : "translateY(100%)",
-                    transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <a href="/" className="font-display text-lg">Charan</a>
-                    <button onClick={() => setMenuOpen(false)} aria-label="Close menu">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                      </svg>
-                    </button>
-                  </div>
-                  <nav className="flex flex-col gap-4">
-                    <a href="/#work" className="text-lg">Work</a>
-                    <a href="/about" className="text-lg">About</a>
-                    <a href="/contact" className="text-lg">Contact</a>
-                  </nav>
-                </div>
-              </div>
-            )}
           </header>
         </div>
 

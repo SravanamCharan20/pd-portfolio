@@ -103,14 +103,48 @@ function AboutPage() {
     return <MobileAbout />;
   }
 
-
-
   return (
-    <div
-      ref={containerRef}
-      style={{ height: `${SCROLL_MULTIPLIER * 100}vh` }}
-      className="relative bg-background"
-    >
+    <>
+      {/* Mobile bottom-sheet menu */}
+      <div
+        className={`fixed inset-0 z-[100] md:hidden flex items-end ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        role="dialog"
+        aria-modal={menuOpen}
+        aria-label="Main menu"
+      >
+        <button
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${menuOpen ? "opacity-60" : "opacity-0"}`}
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+          tabIndex={menuOpen ? 0 : -1}
+        />
+        <div
+          className={`relative w-full bg-white text-black rounded-t-3xl p-6 pb-10 transition-transform duration-500 ${menuOpen ? "translate-y-0" : "translate-y-full"}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-10 h-1 bg-black/20 rounded-full mx-auto mb-6" />
+          <div className="flex items-center justify-between mb-8">
+            <a href="/" className="font-display text-lg font-medium">Charan</a>
+            <button onClick={() => setMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+          <nav className="flex flex-col gap-5">
+            <a href="/#work" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Work</a>
+            <a href="/about" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">About</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Contact</a>
+          </nav>
+        </div>
+      </div>
+
+      <div
+        ref={containerRef}
+        style={{ height: `${SCROLL_MULTIPLIER * 100}vh` }}
+        className="relative bg-background"
+      >
       
       
       <div className="sticky top-0 h-screen w-screen overflow-hidden">
@@ -130,38 +164,6 @@ function AboutPage() {
             </svg>
           </button>
 
-          {menuOpen && (
-            <div className="fixed inset-0 z-50 md:hidden flex items-end" role="dialog" aria-modal="true" aria-label="Main menu">
-              <button
-                className="absolute inset-0 bg-black/60"
-                onClick={() => setMenuOpen(false)}
-                aria-hidden="true"
-              />
-
-              <div
-                className="bg-white text-black w-full rounded-t-2xl p-6"
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  transform: menuOpen ? "translateY(0%)" : "translateY(100%)",
-                  transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
-                }}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <a href="/" className="font-display text-lg">Charan</a>
-                  <button onClick={() => setMenuOpen(false)} aria-label="Close menu">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                    </svg>
-                  </button>
-                </div>
-                <nav className="flex flex-col gap-4">
-                  <a href="/#work" className="text-lg">Work</a>
-                  <a href="/about" className="text-lg">About</a>
-                  <a href="/contact" className="text-lg">Contact</a>
-                </nav>
-              </div>
-            </div>
-          )}
         </header>
 
         <div
@@ -632,10 +634,12 @@ function AboutPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
 function MobileAbout() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const cardBase: React.CSSProperties = {
     background: "#ffffff",
     border: "1px solid rgba(0,0,0,0.06)",
@@ -655,22 +659,66 @@ function MobileAbout() {
   };
 
   return (
-    <div
-      className="min-h-screen w-full"
-      style={{ background: "#ffffff", padding: "20px 16px 32px" }}
-    >
-      <h1
-        style={{
-          fontSize: "44px",
-          fontWeight: 600,
-          letterSpacing: "-0.04em",
-          color: "#1d1d1f",
-          lineHeight: 1,
-          margin: "8px 0 20px",
-        }}
+    <>
+      {/* Mobile bottom-sheet menu */}
+      <div
+        className={`fixed inset-0 z-[100] flex items-end ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        role="dialog"
+        aria-modal={menuOpen}
+        aria-label="Main menu"
       >
-        About me
-      </h1>
+        <button
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${menuOpen ? "opacity-60" : "opacity-0"}`}
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+          tabIndex={menuOpen ? 0 : -1}
+        />
+        <div
+          className={`relative w-full bg-white text-black rounded-t-3xl p-6 pb-10 transition-transform duration-500 ${menuOpen ? "translate-y-0" : "translate-y-full"}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-10 h-1 bg-black/20 rounded-full mx-auto mb-6" />
+          <div className="flex items-center justify-between mb-8">
+            <a href="/" className="font-display text-lg font-medium">Charan</a>
+            <button onClick={() => setMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+          <nav className="flex flex-col gap-5">
+            <a href="/#work" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Work</a>
+            <a href="/about" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">About</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Contact</a>
+          </nav>
+        </div>
+      </div>
+
+      <div
+        className="min-h-screen w-full"
+        style={{ background: "#ffffff", padding: "20px 16px 32px" }}
+      >
+        <header className="flex items-center justify-between mb-6">
+          <a href="/" className="font-display text-lg font-medium" style={{ color: "#1d1d1f", textDecoration: "none" }}>Charan</a>
+          <button className="p-2" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+            </svg>
+          </button>
+        </header>
+        <h1
+          style={{
+            fontSize: "44px",
+            fontWeight: 600,
+            letterSpacing: "-0.04em",
+            color: "#1d1d1f",
+            lineHeight: 1,
+            margin: "8px 0 20px",
+          }}
+        >
+          About me
+        </h1>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
         {/* Profile card */}
@@ -898,5 +946,6 @@ function MobileAbout() {
         </div>
       </div>
     </div>
+    </>
   );
 }

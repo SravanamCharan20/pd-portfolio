@@ -28,10 +28,49 @@ const sections = [
   { id: "reflection", label: "Reflection" },
 ];
 
+const ttdStripCSS = `
+.ttd-screen-iframe{transform:scale(${220/375});transform-origin:top left}
+@media(min-width:640px){.ttd-screen-iframe{transform:scale(${260/375})}}
+@media(min-width:768px){.ttd-screen-iframe{transform:scale(${300/375})}}
+`;
+
+function TTDScreenStrip({ screens, caption }: { screens: { id: string; label?: string }[]; caption: string }) {
+  return (
+    <div className="mb-8">
+      <style dangerouslySetInnerHTML={{ __html: ttdStripCSS }} />
+      <div className="-mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden bg-[#ECEFF1] p-4 sm:p-8 md:p-12">
+        <div className="flex items-start justify-start sm:justify-center gap-4 sm:gap-8 overflow-x-auto pb-2 snap-x snap-mandatory">
+          {screens.map((s, i) => (
+            <div key={i} className="flex flex-col items-center shrink-0 snap-center">
+              <div className="bg-[#111] rounded-[1.8rem] sm:rounded-[2.2rem] p-2 sm:p-2.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)]">
+                <div
+                  className="relative overflow-hidden rounded-[1.4rem] sm:rounded-[1.8rem] bg-white w-[220px] sm:w-[260px] md:w-[300px]"
+                  style={{ aspectRatio: "375/780" }}
+                >
+                  <iframe
+                    src={`/ttd-prototype/index.html?embed&bare&screens=${s.id}`}
+                    title={s.label || s.id}
+                    className="ttd-screen-iframe absolute top-0 left-0 border-0 bg-white block"
+                    style={{ width: "375px", height: "780px" }}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              {s.label && <p className="text-xs text-ink-soft mt-2 text-center max-w-[220px] sm:max-w-[260px]">{s.label}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+      <p className="text-sm text-ink-soft mt-4">{caption}</p>
+    </div>
+  );
+}
+
 function TTDCaseStudy() {
   const [active, setActive] = useState("overview");
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const [menuOpen, setMenuOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -62,6 +101,91 @@ function TTDCaseStudy() {
       <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
 
+      {/* Mobile bottom-sheet menu */}
+      <div
+        className={`fixed inset-0 z-[100] md:hidden flex items-end ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        role="dialog"
+        aria-modal={menuOpen}
+        aria-label="Main menu"
+      >
+        <button
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${menuOpen ? "opacity-60" : "opacity-0"}`}
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+          tabIndex={menuOpen ? 0 : -1}
+        />
+        <div
+          className={`relative w-full bg-white text-black rounded-t-3xl p-6 pb-10 transition-transform duration-500 ${menuOpen ? "translate-y-0" : "translate-y-full"}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-10 h-1 bg-black/20 rounded-full mx-auto mb-6" />
+          <div className="flex items-center justify-between mb-8">
+            <a href="/" className="font-display text-lg font-medium">Charan</a>
+            <button onClick={() => setMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+          <nav className="flex flex-col gap-5">
+            <a href="/#work" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Work</a>
+            <a href="/about" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">About</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Contact</a>
+          </nav>
+        </div>
+      </div>
+
+      {/* Mobile floating section nav */}
+      <button
+        className="md:hidden fixed bottom-6 right-6 z-[90] w-12 h-12 rounded-full bg-black text-white shadow-lg flex items-center justify-center"
+        onClick={() => setNavOpen(true)}
+        aria-label="Section navigation"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h10M4 18h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      </button>
+      <div
+        className={`fixed inset-0 z-[95] md:hidden flex items-end ${navOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        role="dialog"
+        aria-modal={navOpen}
+        aria-label="Section navigation"
+      >
+        <button
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${navOpen ? "opacity-60" : "opacity-0"}`}
+          onClick={() => setNavOpen(false)}
+          aria-hidden="true"
+          tabIndex={navOpen ? 0 : -1}
+        />
+        <div
+          className={`relative w-full bg-white text-black rounded-t-3xl p-6 pb-10 transition-transform duration-500 ${navOpen ? "translate-y-0" : "translate-y-full"}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-10 h-1 bg-black/20 rounded-full mx-auto mb-6" />
+          <p className="text-xs uppercase tracking-[0.16em] text-ink-soft mb-4">Sections</p>
+          <ul className="space-y-3">
+            {sections.map((s) => (
+              <li key={s.id}>
+                <button
+                  onClick={() => { scrollTo(s.id); setNavOpen(false); }}
+                  className={`text-left text-base py-1 cursor-pointer transition-colors ${active === s.id ? "text-purple-700 font-medium" : "text-ink-soft"}`}
+                >
+                  {s.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={() => { window.scrollTo({ top: 0, behavior: "smooth" }); setNavOpen(false); }}
+            className="mt-4 pt-4 border-t border-border text-ink-soft text-sm cursor-pointer"
+          >
+            Back to top
+          </button>
+        </div>
+      </div>
+
       <div className="bg-background min-h-screen">
         {/* NAV */}
         <div className="relative top-0 bg-background/10 backdrop-blur-md border-b border-border">
@@ -80,44 +204,12 @@ function TTDCaseStudy() {
               </svg>
             </button>
 
-            {menuOpen && (
-              <div className="fixed inset-0 z-50 md:hidden flex items-end" role="dialog" aria-modal="true" aria-label="Main menu">
-                <button
-                  className="absolute inset-0 bg-black/60"
-                  onClick={() => setMenuOpen(false)}
-                  aria-hidden="true"
-                />
-
-                <div
-                  className="bg-white text-black w-full rounded-t-2xl p-6"
-                  onClick={(e) => e.stopPropagation()}
-                  style={{
-                    transform: menuOpen ? "translateY(0%)" : "translateY(100%)",
-                    transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <a href="/" className="font-display text-lg">Charan</a>
-                    <button onClick={() => setMenuOpen(false)} aria-label="Close menu">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                      </svg>
-                    </button>
-                  </div>
-                  <nav className="flex flex-col gap-4">
-                    <a href="/#work" className="text-lg">Work</a>
-                    <a href="/about" className="text-lg">About</a>
-                    <a href="/contact" className="text-lg">Contact</a>
-                  </nav>
-                </div>
-              </div>
-            )}
           </header>
         </div>
         {/* HERO */}
         <section className="px-8 md:px-16 pt-16 md:pt-24 pb-16">
           <p className="text-sm text-ink-soft tracking-wider uppercase mb-6">UX Case Study · Civic Service · Mobile</p>
-          <h1 className="font-display font-light text-[10vw] md:text-[7vw] leading-[1.10] tracking-[-0.04em] text-ink max-w-7xl">
+          <h1 className="font-display font-light text-[7vw] sm:text-[10vw] md:text-[7vw] leading-[1.10] tracking-[-0.04em] text-ink max-w-7xl">
             Designing fairness into a ~900,000-person race
           </h1>
           <p className="mt-10 text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed">
@@ -126,8 +218,8 @@ function TTDCaseStudy() {
         </section>
         {/* BODY w/ sidebar */}
         <div className="px-8 md:px-16 pb-32 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12 md:gap-20">
-          {/* SIDEBAR */}
-          <aside className="md:sticky md:top-24 md:self-start">
+          {/* SIDEBAR — hidden on mobile, replaced by floating FAB */}
+          <aside className="hidden md:block md:sticky md:top-24 md:self-start">
             <ul className="space-y-4 text-[15px]">
               {sections.map((s) => (
                 <li key={s.id}>
@@ -153,7 +245,7 @@ function TTDCaseStudy() {
           <article className="w-full space-y-24">
             {/* OVERVIEW */}
             <section ref={setRef("overview")} id="overview" className="scroll-mt-24">
-              <div className="grid grid-cols-2 gap-x-10 gap-y-8 mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 sm:gap-y-8 mb-12">
                 <div>
                   <p className="text-sm font-medium text-ink mb-2">My Role</p>
                   <p className="text-ink-soft">Product Designer (end to end)</p>
@@ -187,7 +279,7 @@ function TTDCaseStudy() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-4 gap-4 mb-12">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
                 {[
                   { stat: "~900K", label: "Concurrent users at release" },
                   { stat: "~240K", label: "Tickets per month" },
@@ -214,9 +306,9 @@ function TTDCaseStudy() {
 
             {/* THE DIAGNOSIS */}
             <section ref={setRef("diagnosis")} id="diagnosis" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">01</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">The Diagnosis</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">01</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The Diagnosis</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 I mapped the current booking flow step by step from the live app, Play Store reviews, and a published system-design teardown. The failure sits at one specific seam.
@@ -256,9 +348,9 @@ function TTDCaseStudy() {
 
             {/* WHO IT HURTS MOST */}
             <section ref={setRef("archetypes")} id="archetypes" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">02</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">Who It Hurts Most</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">02</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">Who It Hurts Most</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 A first-come-first-served typing race does not distribute pain evenly. It systematically disadvantages exactly the devotees with the least technical advantage.
@@ -288,9 +380,9 @@ function TTDCaseStudy() {
 
             {/* THE CORE MOVE */}
             <section ref={setRef("core-move")} id="core-move" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">03</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">The Core Move</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">03</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The Core Move</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 Don't make it faster. Change the order. Every robust booking system I studied — Ticketmaster's Smart Queue, IRCTC's berth block, the Hajj Nusuk platform — shares one principle: never make the user enter data under allocation pressure, and always hold what they select.
@@ -328,9 +420,9 @@ function TTDCaseStudy() {
 
             {/* THE HERO INTERACTION */}
             <section ref={setRef("hero-interaction")} id="hero-interaction" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">04</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">The Hero Interaction</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">04</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The Hero Interaction</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
                 Five minutes of typing becomes five seconds of tapping. Instead of typing six people's details against a countdown, the user taps saved profile pills. Selection takes seconds. The data was entered earlier, in a calm pre-booking moment with no clock running.
@@ -339,22 +431,20 @@ function TTDCaseStudy() {
                 Pills are 44px tall for fumble-free tapping on a budget phone. A blocked pill (a pilgrim already booked this cycle) is shown, dimmed, with a tap-to-explain — so the constraint is surfaced here, before the queue, not discovered after a 30-minute wait.
               </p>
 
-              <div className="rounded-2xl overflow-hidden bg-[#ECEFF1]" style={{ height: "920px" }}>
-                <iframe
-                  src="/ttd-prototype/index.html?embed&screens=select,constraintInfo"
-                  title="Select Pilgrims — profile pills + constraint info"
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                />
-              </div>
-              <p className="text-sm text-ink-soft mt-4">Select Pilgrims with profile pills · Tap a blocked pill to see why</p>
+              <TTDScreenStrip
+                screens={[
+                  { id: "select", label: "Select Pilgrims" },
+                  { id: "constraintInfo", label: "Constraint Info" },
+                ]}
+                caption="Select Pilgrims with profile pills · Tap a blocked pill to see why"
+              />
             </section>
 
             {/* THE UPSTREAM FIX */}
             <section ref={setRef("upstream-fix")} id="upstream-fix" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">05</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">The Upstream Fix</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">05</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The Upstream Fix</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
                 For the pills to exist, the data has to be captured earlier. A new 'My Pilgrims' section lets devotees save up to 12 profiles any time — at home, on the train, days before release. Twelve is deliberate: TTD allows two transactions of six pilgrims each per cycle, so 12 covers both without re-entry.
@@ -363,22 +453,22 @@ function TTDCaseStudy() {
                 One detail that prevents a gate-day disaster: the Name field placeholder reads 'Full name exactly as on ID proof'. TTD turns away pilgrims whose ticket name doesn't match their ID — a single Lakshmi / Laxmi difference is enough. Solving it at calm profile-creation time, not under the countdown, is the difference between a saved trip and a wasted one.
               </p>
 
-              <div className="rounded-2xl overflow-hidden bg-[#ECEFF1]" style={{ height: "1780px" }}>
-                <iframe
-                  src="/ttd-prototype/index.html?embed&screens=menu,pilEmpty,pilList,add"
-                  title="My Pilgrims — menu entry, empty state, saved list, add form"
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                />
-              </div>
-              <p className="text-sm text-ink-soft mt-4">Menu with new entry · Empty state · Saved pilgrim list · Add Pilgrim calm form</p>
+              <TTDScreenStrip
+                screens={[
+                  { id: "menu", label: "Services Menu" },
+                  { id: "pilEmpty", label: "Empty State" },
+                  { id: "pilList", label: "Saved List" },
+                  { id: "add", label: "Add Pilgrim" },
+                ]}
+                caption="Menu with new entry · Empty state · Saved pilgrim list · Add Pilgrim calm form"
+              />
             </section>
 
             {/* THE GUARANTEE */}
             <section ref={setRef("guarantee")} id="guarantee" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">06</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">The Guarantee</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">06</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The Guarantee</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
                 Lock the slot, then start the clock. The moment a user confirms a slot, the backend locks it and a payment timer begins. The slot disappears from everyone else's screen. A two-tap confirm (pick, then confirm in a sheet) prevents accidental locks.
@@ -401,22 +491,21 @@ function TTDCaseStudy() {
                 ))}
               </div>
 
-              <div className="rounded-2xl overflow-hidden bg-[#ECEFF1]" style={{ height: "920px" }}>
-                <iframe
-                  src="/ttd-prototype/index.html?embed&screens=slot,payDefault,payWarn"
-                  title="Confirm Lock + Payment Hold with live timer"
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                />
-              </div>
-              <p className="text-sm text-ink-soft mt-4">Confirm Slot Lock sheet · Payment hold with live timer · Timer critical state</p>
+              <TTDScreenStrip
+                screens={[
+                  { id: "slot", label: "Confirm Lock" },
+                  { id: "payDefault", label: "Payment Hold" },
+                  { id: "payWarn", label: "Timer Critical" },
+                ]}
+                caption="Confirm Slot Lock sheet · Payment hold with live timer · Timer critical state"
+              />
             </section>
 
             {/* DESIGNING THE LOSS */}
             <section ref={setRef("designing-loss")} id="designing-loss" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">07</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">Designing the Loss</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">07</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">Designing the Loss</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
                 70% of users lose. That's the majority experience. If the winning path is polished and the losing path is a dead end, I've designed for the minority. So every failure state answers three questions: what's happening, why, and what you can do next.
@@ -425,22 +514,22 @@ function TTDCaseStudy() {
                 The key reversal from today's app: when a payment fails, the slot stays locked for the rest of the window. The user switches from UPI to card and tries again — without losing the slot or re-typing anything. The current app drops them back into the queue to start over.
               </p>
 
-              <div className="rounded-2xl overflow-hidden bg-[#ECEFF1]" style={{ height: "1780px" }}>
-                <iframe
-                  src="/ttd-prototype/index.html?embed&screens=payFail,paySuccess,expiredOpen,expiredClosed"
-                  title="Failure states — payment failed, success, expired"
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                />
-              </div>
-              <p className="text-sm text-ink-soft mt-4">Payment failed (slot still locked) · Booking confirmed · Hold expired (queue open) · Hold expired (queue closed)</p>
+              <TTDScreenStrip
+                screens={[
+                  { id: "payFail", label: "Payment Failed" },
+                  { id: "paySuccess", label: "Confirmed" },
+                  { id: "expiredOpen", label: "Expired (Open)" },
+                  { id: "expiredClosed", label: "Expired (Closed)" },
+                ]}
+                caption="Payment failed (slot still locked) · Booking confirmed · Hold expired (queue open) · Hold expired (queue closed)"
+              />
             </section>
 
             {/* THE EDGES */}
             <section ref={setRef("edges")} id="edges" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">08</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">The Edges</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">08</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The Edges</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 A booking flow is only as honest as its edge cases. These aren't decoration; they're where 25 million users' trust is won or lost.
@@ -462,22 +551,26 @@ function TTDCaseStudy() {
                 ))}
               </div>
 
-              <div className="rounded-2xl overflow-hidden bg-[#ECEFF1] mt-10" style={{ height: "1780px" }}>
-                <iframe
-                  src="/ttd-prototype/index.html?embed&screens=upiRedirect,waiting,webhook,inactivity,deleteDlg,constraintInfo"
-                  title="Edge case screens"
-                  className="w-full h-full border-0"
-                  loading="lazy"
+              <div className="mt-10">
+                <TTDScreenStrip
+                  screens={[
+                    { id: "upiRedirect", label: "UPI Redirect" },
+                    { id: "waiting", label: "Waiting" },
+                    { id: "webhook", label: "Webhook" },
+                    { id: "inactivity", label: "Inactivity" },
+                    { id: "deleteDlg", label: "Remove" },
+                    { id: "constraintInfo", label: "Constraint" },
+                  ]}
+                  caption="UPI redirect · Awaiting confirmation · Webhook pending · Inactivity prompt · Delete confirm · Constraint info"
                 />
               </div>
-              <p className="text-sm text-ink-soft mt-4">UPI redirect · Awaiting confirmation · Webhook pending · Inactivity prompt · Delete confirm · Constraint info</p>
             </section>
 
             {/* WHAT I DELIBERATELY DIDN'T BUILD */}
             <section ref={setRef("not-built")} id="not-built" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">09</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">What I Didn't Build</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">09</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">What I Didn't Build</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 Scope discipline was half this project. Several 'impressive' features were considered and killed on purpose.
@@ -500,16 +593,16 @@ function TTDCaseStudy() {
 
             {/* HOW I'D KNOW IT WORKED */}
             <section ref={setRef("metrics")} id="metrics" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">10</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">How I'd Know It Worked</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">10</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">How I'd Know It Worked</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 This is a concept redesign without production data, so these are hypotheses — each one tied to a specific structural change, each one measurable.
               </p>
 
-              <div className="overflow-hidden rounded-2xl border border-border">
-                <table className="w-full text-sm">
+              <div className="overflow-x-auto rounded-2xl border border-border">
+                <table className="w-full text-sm min-w-[500px]">
                   <thead>
                     <tr className="bg-surface">
                       <th className="text-left p-4 font-medium text-ink">Metric</th>
@@ -538,9 +631,9 @@ function TTDCaseStudy() {
 
             {/* REFLECTION */}
             <section ref={setRef("reflection")} id="reflection" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">11</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">Reflection</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">11</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">Reflection</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
                 The most valuable design decision here wasn't a screen — it was refusing to add screens. The instinct to build a verification system, an anti-broker engine, a richer queue, was strong. Killing those and reducing the intervention to five surgical screens on top of a live app was harder, and more correct.

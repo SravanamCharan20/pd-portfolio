@@ -27,16 +27,16 @@ const sections = [
 function ScreenStrip({ screens, caption }: { screens: { src: string; label?: string }[]; caption: string }) {
   return (
     <div className="mb-8">
-      <div className="rounded-2xl overflow-hidden bg-[#ECEFF1] p-8 md:p-12">
-        <div className="flex flex-wrap items-start justify-center gap-8">
+      <div className="rounded-2xl overflow-hidden bg-[#ECEFF1] p-4 sm:p-8 md:p-12">
+        <div className="flex items-start justify-start sm:justify-center gap-4 sm:gap-8 overflow-x-auto pb-2 snap-x snap-mandatory">
           {screens.map((s, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <div className="bg-[#111] rounded-[2.2rem] p-2.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)]">
+            <div key={i} className="flex flex-col items-center shrink-0 snap-center">
+              <div className="bg-[#111] rounded-[1.8rem] sm:rounded-[2.2rem] p-2 sm:p-2.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)]">
                 <iframe
                   src={s.src}
                   title={s.label || "Screen"}
-                  className="rounded-[1.8rem] border-0 bg-white block"
-                  style={{ width: 300, aspectRatio: "9/20" }}
+                  className="rounded-[1.4rem] sm:rounded-[1.8rem] border-0 bg-white block w-[220px] sm:w-[260px] md:w-[300px]"
+                  style={{ aspectRatio: "9/20" }}
                   loading="lazy"
                 />
               </div>
@@ -53,6 +53,7 @@ function OmakaseCaseStudy() {
   const [active, setActive] = useState("overview");
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const [menuOpen, setMenuOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -83,6 +84,91 @@ function OmakaseCaseStudy() {
       <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
 
+      {/* Mobile bottom-sheet menu */}
+      <div
+        className={`fixed inset-0 z-[100] md:hidden flex items-end ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        role="dialog"
+        aria-modal={menuOpen}
+        aria-label="Main menu"
+      >
+        <button
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${menuOpen ? "opacity-60" : "opacity-0"}`}
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+          tabIndex={menuOpen ? 0 : -1}
+        />
+        <div
+          className={`relative w-full bg-white text-black rounded-t-3xl p-6 pb-10 transition-transform duration-500 ${menuOpen ? "translate-y-0" : "translate-y-full"}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-10 h-1 bg-black/20 rounded-full mx-auto mb-6" />
+          <div className="flex items-center justify-between mb-8">
+            <a href="/" className="font-display text-lg font-medium">Charan</a>
+            <button onClick={() => setMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+          <nav className="flex flex-col gap-5">
+            <a href="/#work" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Work</a>
+            <a href="/about" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">About</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Contact</a>
+          </nav>
+        </div>
+      </div>
+
+      {/* Mobile floating section nav */}
+      <button
+        className="md:hidden fixed bottom-6 right-6 z-[90] w-12 h-12 rounded-full bg-black text-white shadow-lg flex items-center justify-center"
+        onClick={() => setNavOpen(true)}
+        aria-label="Section navigation"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h10M4 18h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      </button>
+      <div
+        className={`fixed inset-0 z-[95] md:hidden flex items-end ${navOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        role="dialog"
+        aria-modal={navOpen}
+        aria-label="Section navigation"
+      >
+        <button
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${navOpen ? "opacity-60" : "opacity-0"}`}
+          onClick={() => setNavOpen(false)}
+          aria-hidden="true"
+          tabIndex={navOpen ? 0 : -1}
+        />
+        <div
+          className={`relative w-full bg-white text-black rounded-t-3xl p-6 pb-10 transition-transform duration-500 ${navOpen ? "translate-y-0" : "translate-y-full"}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-10 h-1 bg-black/20 rounded-full mx-auto mb-6" />
+          <p className="text-xs uppercase tracking-[0.16em] text-ink-soft mb-4">Sections</p>
+          <ul className="space-y-3">
+            {sections.map((s) => (
+              <li key={s.id}>
+                <button
+                  onClick={() => { scrollTo(s.id); setNavOpen(false); }}
+                  className={`text-left text-base py-1 cursor-pointer transition-colors ${active === s.id ? "text-red-500 font-medium" : "text-ink-soft"}`}
+                >
+                  {s.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={() => { window.scrollTo({ top: 0, behavior: "smooth" }); setNavOpen(false); }}
+            className="mt-4 pt-4 border-t border-border text-ink-soft text-sm cursor-pointer"
+          >
+            Back to top
+          </button>
+        </div>
+      </div>
+
       <div className="bg-background min-h-screen">
         {/* NAV */}
         <div className="relative top-0 bg-background/10 backdrop-blur-md border-b border-border">
@@ -101,45 +187,13 @@ function OmakaseCaseStudy() {
               </svg>
             </button>
 
-            {menuOpen && (
-              <div className="fixed inset-0 z-50 md:hidden flex items-end" role="dialog" aria-modal="true" aria-label="Main menu">
-                <button
-                  className="absolute inset-0 bg-black/60"
-                  onClick={() => setMenuOpen(false)}
-                  aria-hidden="true"
-                />
-
-                <div
-                  className="bg-white text-black w-full rounded-t-2xl p-6"
-                  onClick={(e) => e.stopPropagation()}
-                  style={{
-                    transform: menuOpen ? "translateY(0%)" : "translateY(100%)",
-                    transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <a href="/" className="font-display text-lg">Charan</a>
-                    <button onClick={() => setMenuOpen(false)} aria-label="Close menu">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                      </svg>
-                    </button>
-                  </div>
-                  <nav className="flex flex-col gap-4">
-                    <a href="/#work" className="text-lg">Work</a>
-                    <a href="/about" className="text-lg">About</a>
-                    <a href="/contact" className="text-lg">Contact</a>
-                  </nav>
-                </div>
-              </div>
-            )}
           </header>
         </div>
 
         {/* HERO */}
         <section className="px-8 md:px-16 pt-16 md:pt-24 pb-16">
           <p className="text-sm text-ink-soft tracking-wider uppercase mb-6">Case Study · 2026</p>
-          <h1 className="font-display font-light text-[10vw] md:text-[7vw] leading-[0.95] tracking-[-0.04em] text-ink max-w-6xl">
+          <h1 className="font-display font-light text-[8vw] sm:text-[10vw] md:text-[7vw] leading-[0.95] tracking-[-0.04em] text-ink max-w-6xl">
             Omakase — The Duel
           </h1>
           <p className="mt-10 text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed">
@@ -149,8 +203,8 @@ function OmakaseCaseStudy() {
 
         {/* BODY w/ sidebar */}
         <div className="px-8 md:px-16 pb-32 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12 md:gap-20">
-          {/* SIDEBAR */}
-          <aside className="md:sticky md:top-24 md:self-start">
+          {/* SIDEBAR — hidden on mobile, replaced by floating FAB */}
+          <aside className="hidden md:block md:sticky md:top-24 md:self-start">
             <ul className="space-y-4 text-[15px]">
               {sections.map((s) => (
                 <li key={s.id}>
@@ -176,7 +230,7 @@ function OmakaseCaseStudy() {
           <article className="w-full space-y-24">
             {/* OVERVIEW */}
             <section ref={setRef("overview")} id="overview" className="scroll-mt-24">
-              <div className="grid grid-cols-2 gap-x-10 gap-y-8 mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 sm:gap-y-8 mb-12">
                 <div>
                   <p className="text-sm font-medium text-ink mb-2">My Role</p>
                   <p className="text-ink-soft">Product Designer — concept, interaction logic, UI, design system</p>
@@ -222,11 +276,12 @@ function OmakaseCaseStudy() {
 
               {/* INTERACTIVE PROTOTYPE — between Solution and Scroll Trap */}
               <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight mt-16 mb-6">Interactive Prototype</h2>
-              <div className="rounded-2xl overflow-hidden bg-[#ECEFF1]" style={{ height: 980 }}>
+              <div className="-mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden overflow-y-auto bg-[#ECEFF1]" style={{ height: "min(980px, 85vh)" }}>
                 <iframe
                   src="/omakase-dc/prototype.html?mode=phone"
                   title="Omakase Duel — Interactive Prototype"
-                  className="w-full h-full border-0"
+                  className="h-full border-0"
+                  style={{ width: "100%", minWidth: "375px" }}
                   loading="lazy"
                 />
               </div>
@@ -249,9 +304,9 @@ function OmakaseCaseStudy() {
 
             {/* 01 — THE SCROLL TRAP */}
             <section ref={setRef("scroll-trap")} id="scroll-trap" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">01</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">The Scroll Trap</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">01</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The Scroll Trap</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8 italic">
                 I opened Swiggy three times last Tuesday before I ordered anything. Scrolled. Closed the app. Opened it again. Scrolled more. Eventually I ordered the same biryani I always get — not because I wanted it, but because I ran out of patience.
@@ -271,9 +326,9 @@ function OmakaseCaseStudy() {
 
             {/* 02 — WHY 2, NOT 20 */}
             <section ref={setRef("why-two")} id="why-two" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">02</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">Why 2, Not 20</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">02</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">Why 2, Not 20</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
                 Two dishes, side by side. Pick one. Repeat. It took two wrong sketches to get here.
@@ -286,12 +341,12 @@ function OmakaseCaseStudy() {
               </p>
 
               {/* EVOLUTION STRIP — interactive embed */}
-              <div className="rounded-2xl overflow-hidden bg-white mb-8">
+              <div className="-mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden overflow-x-auto bg-white mb-8">
                 <iframe
                   src="/omakase-evolution/index.html"
                   title="Evolution strip — Swipe → Rank → Binary Duel"
-                  className="w-full border-0"
-                  style={{ height: 540 }}
+                  className="border-0"
+                  style={{ width: "100%", height: "min(540px, 70vh)", minWidth: 600 }}
                   loading="lazy"
                 />
               </div>
@@ -306,9 +361,9 @@ function OmakaseCaseStudy() {
 
             {/* 03 — HOW A DUEL PLAYS OUT */}
             <section ref={setRef("duel-flow")} id="duel-flow" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">03</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">How a Duel Plays Out</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">03</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">How a Duel Plays Out</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 The duel appears when the user has scrolled past thirty dishes, tapped into three, backed out of each in seconds, and stalled. That's not browsing. That's being stuck.
@@ -373,9 +428,9 @@ function OmakaseCaseStudy() {
 
             {/* 04 — THREE ENDINGS */}
             <section ref={setRef("three-endings")} id="three-endings" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">04</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">Three Ways It Ends</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">04</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">Three Ways It Ends</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 A game with one ending gets boring. A game with no ending breaks trust. The duel has three, each designed for a different emotional state.
@@ -413,9 +468,9 @@ function OmakaseCaseStudy() {
 
             {/* 05 — WHAT ALMOST BROKE IT */}
             <section ref={setRef("what-broke")} id="what-broke" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">05</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">What Almost Broke It</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">05</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">What Almost Broke It</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
                 Nothing here broke in code, because nothing was built. It broke on paper. I pulled twenty-five real dishes from my own browse history into a sheet and ran the algorithm by hand — playing both user and system, round by round, for hours. Three breaks surfaced.
@@ -451,15 +506,15 @@ function OmakaseCaseStudy() {
 
             {/* 06 — WHY THIS MATTERS */}
             <section ref={setRef("why-matters")} id="why-matters" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">06</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">Why This Matters</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">06</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">Why This Matters</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 Every duel session that ends in an add-to-cart is an order that almost didn't happen. The user was ready to close the app. The duel caught them. That — recovered abandonment — is where the money is.
               </p>
 
-              <div className="grid grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 {[
                   { stat: "<75s", label: "Target time-to-cart from duel entry" },
                   { stat: "~45s", label: "Worked session in Section 03" },
@@ -482,9 +537,9 @@ function OmakaseCaseStudy() {
 
             {/* 07 — DESIGN SYSTEM */}
             <section ref={setRef("design-system")} id="design-system" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">07</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">The System Underneath</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">07</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The System Underneath</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-8">
                 The visual theme is loosely inspired by Zomato. This isn't a redesign for Zomato — the duel is the feature concept, and Zomato's visual language gave it a familiar roof to live under. Everything sits on a 4pt grid in Figma.
@@ -525,9 +580,9 @@ function OmakaseCaseStudy() {
 
             {/* 08 — WHAT THIS DOESN'T SOLVE */}
             <section ref={setRef("honest-gaps")} id="honest-gaps" className="scroll-mt-24">
-              <div className="flex items-end justify-between mb-8">
-                <span className="font-display text-5xl text-ink-soft/40">08</span>
-                <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight">What This Doesn't Solve</h2>
+              <div className="mb-8">
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">08</span>
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">What This Doesn't Solve</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
                 The duel solves one specific moment. It's built for one person ordering alone, not groups. It handles veg and non-veg but not deeper dietary needs — Jain, gluten-free, allergies. It assumes the food category is already chosen. And if the user's browsing is too scattered, the duel never triggers at all.
