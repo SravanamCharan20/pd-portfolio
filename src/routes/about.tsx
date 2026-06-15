@@ -1,34 +1,71 @@
 /* eslint-disable prettier/prettier */
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
+import Lenis from "lenis";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Lia Jimenez" },
-      { name: "description", content: "From developer to designer — a horizontal journey across three acts." },
+      { title: "About me" },
+      { name: "description", content: "About me — horizontal scroll experience." },
     ],
   }),
   component: AboutPage,
 });
 
+const REVEAL_TEXT =
+  "After years of writing code, I realized perfect codebases are fundamentally broken when they never ship. I build for screens that real humans actually touch — fast, opinionated, alive. Let's stop treating dev like a high score game and start shipping things that actually feel alive.";
+
 function AboutPage() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [x, setX] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(0); // 0..1 across the horizontal journey
+  const [vw, setVw] = useState<number>(typeof window !== "undefined" ? window.innerWidth : 1280);
+  const [vh, setVh] = useState<number>(typeof window !== "undefined" ? window.innerHeight : 800);
+
+  useEffect(() => {
+    const onResize = () => {
+      setVw(window.innerWidth);
+      setVh(window.innerHeight);
+    };
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+
+  const isMobile = vw < 640;
+  const isTablet = vw >= 640 && vw < 1024;
+
+  // Bigger = more vertical scroll distance => slower horizontal travel & text reveal
+  const SCROLL_MULTIPLIER = 10;
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.4,
+      smoothWheel: true,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+    let rafId = 0;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
-      const sec = sectionRef.current;
-      const track = trackRef.current;
-      if (!sec || !track) return;
-      const rect = sec.getBoundingClientRect();
-      const total = sec.offsetHeight - window.innerHeight;
-      const p = Math.min(Math.max(-rect.top / total, 0), 1);
-      const max = track.scrollWidth - window.innerWidth;
-      setProgress(p);
-      setX(p * max);
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const total = el.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      setProgress(total > 0 ? scrolled / total : 0);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -39,261 +76,783 @@ function AboutPage() {
     };
   }, []);
 
-  const act = progress < 0.34 ? "Developer" : progress < 0.66 ? "Transition" : "Designer";
+  // Phase mapping (progress 0..1 across total vertical scroll):
+  //   0.00 - 0.08 : "About me" intro overlay slides up & fades out
+  //   0.08 - 0.50 : panel 1 pinned, text reveals character-by-character
+  //   0.50 - 1.00 : horizontal scroll across the 3 panels (-200vw)
+  const INTRO_END = 0.08;
+  const REVEAL_END = 0.5;
+
+  const introOut = Math.min(Math.max((progress - 0.0) / INTRO_END, 0), 1);
+  const revealProgress = Math.min(
+    Math.max((progress - INTRO_END) / (REVEAL_END - INTRO_END), 0),
+    1,
+  );
+  const horizProgress = Math.min(
+    Math.max((progress - REVEAL_END) / (1 - REVEAL_END), 0),
+    1,
+  );
+  const translateX = -horizProgress * 200; // 300vw track - 100vw viewport
+
+  const chars = useMemo(() => REVEAL_TEXT.split(""), []);
+  const revealedCount = Math.floor(revealProgress * chars.length);
+
+  if (isMobile) {
+    return <MobileAbout />;
+  }
+
+
 
   return (
-    <>
-      <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif&display=swap" />
-
-      <div className="bg-background min-h-screen">
-        {/* NAV */}
-        <header className="px-8 md:px-16 py-8 flex items-center justify-between sticky top-0 z-30 bg-background/80 backdrop-blur">
-          <a href="/" className="font-display text-xl font-medium">Lia</a>
+    <div
+      ref={containerRef}
+      style={{ height: `${SCROLL_MULTIPLIER * 100}vh` }}
+      className="relative bg-background"
+    >
+      
+      
+      <div className="sticky top-0 h-screen w-screen overflow-hidden">
+        {/* Intro "About me" overlay */}
+        <header className="absolute top-0 left-0 right-0 px-8 md:px-16 z-50 py-8 flex items-center justify-between">
+          <a href="/" className="font-display text-xl font-medium">Charan</a>
           <nav className="flex items-center gap-10 text-sm text-ink-soft">
             <a href="/#work" className="hover:text-ink transition-colors">Work</a>
-            <a href="/about" className="text-ink">About</a>
+            <a href="/about" className="hover:text-ink text-blue-500 text-semibold transition-colors">About</a>
             <a href="/#contact" className="hover:text-ink transition-colors">Contact</a>
           </nav>
         </header>
 
-        {/* INTRO */}
-        <section className="px-8 md:px-16 pt-16 md:pt-24 pb-16">
-          <p className="text-sm text-ink-soft tracking-wider uppercase mb-6">About — three acts</p>
-          <h1 className="font-display font-semibold text-[10vw] md:text-[7vw] leading-[0.95] tracking-[-0.04em] text-ink max-w-5xl">
-            From compiler<br/>to canvas.
-          </h1>
-          <p className="mt-10 text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed">
-            Scroll down to walk through it — left to right. A developer who slowly learned to draw, then never stopped.
-          </p>
-        </section>
-
-        {/* HORIZONTAL JOURNEY */}
-        <section
-          ref={sectionRef}
-          style={{ height: "320vh" }}
-          className="relative"
+        <div
+          className="absolute inset-0 z-20 flex items-center justify-center bg-background"
+          style={{
+            transform: `translateY(${-introOut * 100}%)`,
+            opacity: 1 - introOut,
+            transition: "none",
+          }}
         >
-          <div className="sticky top-0 h-screen overflow-hidden">
-            {/* Progress chrome */}
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-ink-soft">
-              <span className={act === "Developer" ? "text-ink" : ""}>Developer</span>
-              <span className="w-10 h-px bg-border" />
-              <span className={act === "Transition" ? "text-ink" : ""}>Transition</span>
-              <span className="w-10 h-px bg-border" />
-              <span className={act === "Designer" ? "text-ink" : ""}>Designer</span>
-            </div>
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 w-[60%] h-px bg-border">
-              <div className="h-px bg-ink transition-[width] duration-100" style={{ width: `${progress * 100}%` }} />
-            </div>
+          <h1 className="text-[12vw] font-light tracking-tight text-foreground leading-none">
+            About me
+          </h1>
+        </div>
+        
 
+        {/* Horizontal track */}
+        <div
+          ref={trackRef}
+          className="relative flex h-full"
+          style={{
+            width: "300vw",
+            transform: `translate3d(${translateX}vw, 0, 0)`,
+            willChange: "transform",
+          }}
+        >
+          
+          {/* Panel 1: text reveal */}
+          <section className="h-screen w-screen shrink-0 bg-background flex items-center justify-center px-[8vw]">
+            <p className="text-[3.2vw] leading-[1.15] font-medium tracking-tight text-foreground max-w-[84vw]">
+              {chars.map((c, i) => (
+                <span
+                  key={i}
+                  style={{
+                    opacity: i < revealedCount ? 1 : 0.12,
+                    transition: "opacity 120ms linear",
+                  }}
+                >
+                  {c}
+                </span>
+              ))}
+            </p>
+          </section>
+
+          {/* Panel 2 — big "Logic meets design" with scroll reveal */}
+          <section
+            className="relative h-screen w-screen shrink-0 flex items-center justify-center overflow-hidden px-[6vw]"
+            style={{ backgroundColor: "#fafafa" }}
+          >
+            {(() => {
+              // Two-stage reveal: "Logic meets" first, then "design."
+              const line1 = "Logic meets";
+              const line2 = "design.";
+              const p1 = Math.min(Math.max((horizProgress - 0.04) / 0.16, 0), 1);
+              const p2 = Math.min(Math.max((horizProgress - 0.24) / 0.18, 0), 1);
+              const revealed1 = Math.floor(p1 * line1.length);
+              const revealed2 = Math.floor(p2 * line2.length);
+              return (
+                <h2
+                  className="text-center font-semibold"
+                  style={{
+                    fontSize: isMobile ? "16vw" : isTablet ? "12vw" : "10vw",
+                    lineHeight: 1.02,
+                    letterSpacing: "-0.045em",
+                    color: "#1d1d1f",
+                    maxWidth: "92vw",
+                  }}
+                >
+                  <span>
+                    {line1.split("").map((c, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          opacity: i < revealed1 ? 1 : 0.1,
+                          transition: "opacity 120ms linear",
+                          color: i < 5 ? "#16a34a" : undefined,
+                        }}
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </span>
+                  <br />
+                  <span
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(95deg, #FF5E3A 0%, #FF9500 18%, #FFCC00 34%, #34C759 52%, #5AC8FA 70%, #007AFF 84%, #AF52DE 100%)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      color: "transparent",
+                      fontStyle: "italic",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {line2.split("").map((c, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          opacity: i < revealed2 ? 1 : 0.12,
+                          transition: "opacity 120ms linear",
+                        }}
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </span>
+                </h2>
+              );
+            })()}
+          </section>
+
+
+          {/* Panel 3 — Bento grid about me */}
+          <section
+            className="relative h-screen w-screen shrink-0 flex items-center justify-center"
+            style={{
+              backgroundColor: "#ffffff",
+              padding: isMobile ? "5vw 4vw" : isTablet ? "4vw" : "3vw 4vw",
+              overflowY: isMobile || isTablet ? "auto" : "hidden",
+            }}
+          >
+            {(() => {
+              const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+              // Start entering as soon as panel 3 begins coming into view
+              const enter = ease(Math.min(Math.max((horizProgress - 0.55) / 0.35, 0), 1));
+              const pick = (d: string, t: string, m: string) =>
+                isMobile ? m : isTablet ? t : d;
+
+              const cardBase: React.CSSProperties = {
+                background: "#ffffff",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: pick("28px", "24px", "20px"),
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.04), 0 30px 60px -20px rgba(0,0,0,0.08)",
+                color: "#1d1d1f",
+                overflow: "hidden",
+                position: "relative",
+              };
+
+              const labelStyle: React.CSSProperties = {
+                fontSize: pick("11px", "10px", "10px"),
+                letterSpacing: "0.28em",
+                color: "#86868b",
+                textTransform: "uppercase",
+                fontWeight: 500,
+              };
+
+              return (
+                <div
+                  className="relative w-full"
+                  style={{
+                    maxWidth: pick("84vw", "92vw", "100%"),
+                    transform: `translateY(${(1 - enter) * 40}px)`,
+                    opacity: enter,
+                    willChange: "transform, opacity",
+                  }}
+                >
+                  <div
+                    className="grid"
+                    style={{
+                      gridTemplateColumns: pick("1.1fr 1fr", "1fr 1fr", "1fr"),
+                      gap: pick("16px", "14px", "12px"),
+                      height: pick("78vh", "auto", "auto"),
+                    }}
+                  >
+                    {/* LEFT — Profile pic (tall) */}
+                    <div
+                      data-profile-card
+                      style={{
+                        ...cardBase,
+                        background:
+                          "linear-gradient(160deg, #f5f5f7 0%, #ffffff 60%, #fafafa 100%)",
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: pick("28px", "22px", "18px"),
+                        minHeight: pick("auto", "420px", "360px"),
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          background:
+                            "radial-gradient(70% 50% at 50% 30%, rgba(212,175,55,0.10), transparent 70%)",
+                          pointerEvents: "none",
+                        }}
+                      />
+                      <div
+                        style={{
+                          flex: 1,
+                          borderRadius: pick("20px", "18px", "16px"),
+                          background:
+                            "linear-gradient(180deg, #1f1f22 0%, #0f0f11 100%)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          minHeight: pick("auto", "240px", "200px"),
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            background:
+                              "radial-gradient(60% 50% at 50% 20%, rgba(255,255,255,0.08), transparent 60%)",
+                          }}
+                        />
+                        <span
+                          style={{
+                            fontSize: pick("7vw", "84px", "64px"),
+                            fontWeight: 600,
+                            color: "rgba(255,255,255,0.95)",
+                            letterSpacing: "-0.05em",
+                          }}
+                        >
+                          AS
+                        </span>
+                      </div>
+                      <div style={{ marginTop: pick("22px", "18px", "16px"), position: "relative", zIndex: 1 }}>
+                        <div style={{ ...labelStyle, marginBottom: "8px" }}>
+                          Designer · Engineer
+                        </div>
+                        <div
+                          style={{
+                            fontSize: pick("2vw", "26px", "22px"),
+                            fontWeight: 600,
+                            letterSpacing: "-0.03em",
+                            lineHeight: 1.05,
+                          }}
+                        >
+                          Aarav Sharma
+                        </div>
+                        <div
+                          style={{
+                            marginTop: "6px",
+                            fontSize: pick("0.95vw", "13px", "12px"),
+                            color: "#6e6e73",
+                            lineHeight: 1.4,
+                          }}
+                        >
+                          Bengaluru, IN · Building since 2017
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* RIGHT column — stacked */}
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateRows: "1fr auto",
+                        gap: pick("16px", "14px", "12px"),
+                      }}
+                    >
+                      {/* About card */}
+                      <div
+                        style={{
+                          ...cardBase,
+                          padding: pick("28px", "22px", "20px"),
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: pick("20px", "16px", "14px"),
+                          minHeight: pick("auto", "320px", "280px"),
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                          <div style={labelStyle}>About</div>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: pick("12px", "11px", "11px"), color: "#6e6e73" }}>
+                            <span style={{ width: "7px", height: "7px", borderRadius: "999px", background: "#34d399", boxShadow: "0 0 8px #34d399" }} />
+                            Available
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            fontSize: pick("1.6vw", "20px", "17px"),
+                            fontWeight: 500,
+                            lineHeight: 1.3,
+                            letterSpacing: "-0.025em",
+                            color: "#1d1d1f",
+                          }}
+                        >
+                          I design like an engineer and ship like a designer —{" "}
+                          <span style={{ color: "#86868b" }}>
+                            obsessed with the seam where systems become feelings.
+                          </span>
+                        </div>
+
+                        <div
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(3, 1fr)",
+                            gap: pick("14px", "12px", "10px"),
+                            paddingTop: pick("16px", "14px", "12px"),
+                            borderTop: "1px solid rgba(0,0,0,0.06)",
+                          }}
+                        >
+                          {[
+                            { v: "8+", l: "years" },
+                            { v: "42", l: "shipped" },
+                            { v: "11", l: "awards" },
+                          ].map((s) => (
+                            <div key={s.l}>
+                              <div
+                                style={{
+                                  fontSize: pick("2vw", "26px", "22px"),
+                                  fontWeight: 600,
+                                  letterSpacing: "-0.04em",
+                                  lineHeight: 1,
+                                  background: "linear-gradient(180deg,#1d1d1f,#86868b)",
+                                  WebkitBackgroundClip: "text",
+                                  WebkitTextFillColor: "transparent",
+                                }}
+                              >
+                                {s.v}
+                              </div>
+                              <div style={{ fontSize: pick("0.8vw", "11px", "10px"), color: "#86868b", marginTop: "4px", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                                {s.l}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div style={{ marginTop: "auto", display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                          {["Figma", "React", "TypeScript", "Motion", "Swift", "Rust"].map((t) => (
+                            <span
+                              key={t}
+                              style={{
+                                fontSize: pick("12px", "11px", "11px"),
+                                padding: "5px 10px",
+                                borderRadius: "999px",
+                                background: "#f5f5f7",
+                                border: "1px solid rgba(0,0,0,0.05)",
+                                color: "#1d1d1f",
+                              }}
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Bottom row — CTAs */}
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "1fr 1fr",
+                          gap: pick("16px", "14px", "12px"),
+                        }}
+                      >
+                        <button
+                          style={{
+                            ...cardBase,
+                            padding: pick("20px 22px", "16px 18px", "14px 16px"),
+                            background: "#1d1d1f",
+                            color: "#ffffff",
+                            fontSize: pick("15px", "14px", "13px"),
+                            fontWeight: 600,
+                            border: "none",
+                            cursor: "pointer",
+                            letterSpacing: "-0.01em",
+                            boxShadow: "0 10px 30px -10px rgba(0,0,0,0.4)",
+                          }}
+                        >
+                          View Work  →
+                        </button>
+                        <button
+                          style={{
+                            ...cardBase,
+                            padding: pick("20px 22px", "16px 18px", "14px 16px"),
+                            background: "#ffffff",
+                            color: "#1d1d1f",
+                            fontSize: pick("15px", "14px", "13px"),
+                            fontWeight: 500,
+                            cursor: "pointer",
+                            letterSpacing: "-0.01em",
+                          }}
+                        >
+                          Contact me
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </section>
+
+
+
+          {/* One continuous animated path: panel1 → intersection grid → profile pic */}
+          {(() => {
+            const W = vw;
+            const H = vh;
+            // Anchor points in pixel space (no distortion — viewBox matches render box)
+            const startX = 0.30 * W;        // panel 1, somewhere in the text block
+            const startY = 0.78 * H;
+            const gridX = 1.50 * W;         // panel 2 horizontal center
+            const gridY = 0.80 * H;         // pass BELOW the big text
+            const endX = 2.00 * W + 0.08 * W; // panel 3, profile card left edge (~8% in)
+            const endY = 0.50 * H;
+
+
+            // Smooth cubic from start → grid, then cubic from grid → end, joined with matching tangents
+            // Tangent at gridX is horizontal (so the curve passes through the grid like a flat line)
+            const c1x = startX + (gridX - startX) * 0.55;
+            const c1y = startY;
+            const c2x = gridX - (gridX - startX) * 0.25;
+            const c2y = gridY;
+            const c3x = gridX + (endX - gridX) * 0.25;
+            const c3y = gridY;
+            const c4x = endX - (endX - gridX) * 0.4;
+            const c4y = endY;
+
+            const d = `M ${startX} ${startY} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${gridX} ${gridY} C ${c3x} ${c3y}, ${c4x} ${c4y}, ${endX} ${endY}`;
+
+            return (
+              <svg
+                className="pointer-events-none absolute inset-0"
+                viewBox={`0 0 ${3 * W} ${H}`}
+                preserveAspectRatio="none"
+                style={{ width: "300vw", height: "100vh" }}
+              >
+                <defs>
+                  <linearGradient id="vecGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#1d1d1f" stopOpacity="0.55" />
+                    <stop offset="50%" stopColor="#1d1d1f" stopOpacity="0.95" />
+                    <stop offset="100%" stopColor="#1d1d1f" stopOpacity="0.9" />
+                  </linearGradient>
+                </defs>
+
+                <path
+                  d={d}
+                  fill="none"
+                  stroke="url(#vecGrad)"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  pathLength={1}
+                  strokeDasharray={1}
+                  strokeDashoffset={1 - horizProgress}
+                  style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.15))" }}
+                />
+              </svg>
+            );
+          })()}
+
+
+
+        </div>
+
+        {/* Subtle scroll progress bar */}
+        <div
+          className="pointer-events-none absolute top-0 left-0 right-0 z-30"
+          style={{ height: "2px", background: "rgba(255,255,255,0.06)" }}
+        >
+          <div
+            style={{
+              height: "100%",
+              width: `${progress * 100}%`,
+              background: "linear-gradient(90deg, #86868b 0%, #d4af37 100%)",
+              transition: "width 80ms linear",
+              boxShadow: "0 0 8px rgba(212,175,55,0.4)",
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileAbout() {
+  const cardBase: React.CSSProperties = {
+    background: "#ffffff",
+    border: "1px solid rgba(0,0,0,0.06)",
+    borderRadius: "22px",
+    boxShadow:
+      "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.04), 0 20px 40px -20px rgba(0,0,0,0.08)",
+    color: "#1d1d1f",
+    overflow: "hidden",
+    position: "relative",
+  };
+  const labelStyle: React.CSSProperties = {
+    fontSize: "10px",
+    letterSpacing: "0.28em",
+    color: "#86868b",
+    textTransform: "uppercase",
+    fontWeight: 500,
+  };
+
+  return (
+    <div
+      className="min-h-screen w-full"
+      style={{ background: "#ffffff", padding: "20px 16px 32px" }}
+    >
+      <h1
+        style={{
+          fontSize: "44px",
+          fontWeight: 600,
+          letterSpacing: "-0.04em",
+          color: "#1d1d1f",
+          lineHeight: 1,
+          margin: "8px 0 20px",
+        }}
+      >
+        About me
+      </h1>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        {/* Profile card */}
+        <div
+          style={{
+            ...cardBase,
+            background: "linear-gradient(160deg,#f5f5f7 0%,#ffffff 60%,#fafafa 100%)",
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              borderRadius: "16px",
+              background: "linear-gradient(180deg,#1f1f22 0%,#0f0f11 100%)",
+              height: "220px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
             <div
-              ref={trackRef}
-              className="flex h-full will-change-transform"
-              style={{ transform: `translate3d(${-x}px, 0, 0)`, transition: "transform 0.1s linear" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "radial-gradient(60% 50% at 50% 20%, rgba(255,255,255,0.08), transparent 60%)",
+              }}
+            />
+            <span
+              style={{
+                fontSize: "72px",
+                fontWeight: 600,
+                color: "rgba(255,255,255,0.95)",
+                letterSpacing: "-0.05em",
+              }}
             >
-              <DeveloperScreen />
-              <TransitionScreen />
-              <DesignerScreen />
+              AS
+            </span>
+          </div>
+          <div style={{ marginTop: "18px" }}>
+            <div style={{ ...labelStyle, marginBottom: "6px" }}>
+              Designer · Engineer
+            </div>
+            <div
+              style={{
+                fontSize: "26px",
+                fontWeight: 600,
+                letterSpacing: "-0.03em",
+                lineHeight: 1.05,
+              }}
+            >
+              Aarav Sharma
+            </div>
+            <div
+              style={{
+                marginTop: "4px",
+                fontSize: "13px",
+                color: "#6e6e73",
+              }}
+            >
+              Bengaluru, IN · Building since 2017
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* OUTRO */}
-        <section className="px-8 md:px-16 py-32 max-w-4xl">
-          <p className="font-display text-3xl md:text-5xl leading-tight text-ink tracking-tight">
-            Today I live in the seam — close enough to the code to feel the friction, close enough to the canvas to make it beautiful.
-          </p>
-          <div className="mt-12 flex items-center gap-4">
-            <a href="/#work" className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-ink text-background hover:bg-ink/90 transition-colors">See the work <span aria-hidden>↗</span></a>
-            <a href="mailto:hello@lia.studio" className="inline-flex items-center gap-2 px-7 py-4 rounded-full border border-border text-ink hover:bg-surface transition-colors">Say hello</a>
+        {/* About card */}
+        <div
+          style={{
+            ...cardBase,
+            padding: "20px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={labelStyle}>About</div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: "11px",
+                color: "#6e6e73",
+              }}
+            >
+              <span
+                style={{
+                  width: "7px",
+                  height: "7px",
+                  borderRadius: "999px",
+                  background: "#34d399",
+                  boxShadow: "0 0 8px #34d399",
+                }}
+              />
+              Available
+            </div>
           </div>
-        </section>
-      </div>
-    </>
-  );
-}
 
-/* ─────────── SCREEN 1 — DEVELOPER (dark, technical, mono) ─────────── */
-function DeveloperScreen() {
-  return (
-    <div className="shrink-0 w-screen h-screen px-8 md:px-16 py-24 bg-[oklch(0.13_0.012_260)] text-background">
-      <div className="h-full grid grid-cols-6 grid-rows-6 gap-4">
-        {/* Title */}
-        <div className="col-span-3 row-span-2 rounded-3xl bg-background/[0.04] border border-background/10 p-8 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-background/50">Act 01</span>
-          <h2 className="font-display text-5xl md:text-6xl font-medium tracking-tight">
-            I started <br/>in the <span style={{ fontFamily: "'JetBrains Mono', monospace" }} className="text-background/70">terminal.</span>
-          </h2>
-        </div>
-
-        {/* Code block */}
-        <div className="col-span-3 row-span-3 rounded-3xl bg-[oklch(0.18_0.015_260)] border border-background/10 p-6 font-mono text-[13px] leading-relaxed text-background/80" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-          <div className="flex gap-1.5 mb-4">
-            <span className="w-3 h-3 rounded-full bg-background/20" />
-            <span className="w-3 h-3 rounded-full bg-background/20" />
-            <span className="w-3 h-3 rounded-full bg-background/20" />
+          <div
+            style={{
+              fontSize: "17px",
+              fontWeight: 500,
+              lineHeight: 1.35,
+              letterSpacing: "-0.025em",
+              color: "#1d1d1f",
+            }}
+          >
+            I design like an engineer and ship like a designer —{" "}
+            <span style={{ color: "#86868b" }}>
+              obsessed with the seam where systems become feelings.
+            </span>
           </div>
-          <p><span className="text-background/40">$</span> whoami</p>
-          <p className="text-background/60">lia · age 14 · ruby on rails kid</p>
-          <p className="mt-3"><span className="text-background/40">$</span> stack --list</p>
-          <p>→ ruby · postgres · vim · stubborn opinions</p>
-          <p className="mt-3"><span className="text-background/40">$</span> cat ~/.bashrc | tail -1</p>
-          <p>alias ship="git push origin main --force-with-lease"</p>
-          <p className="mt-3"><span className="text-background/40">$</span> ls ./regrets</p>
-          <p className="text-background/50">// no items found.</p>
-        </div>
 
-        {/* Stat */}
-        <div className="col-span-2 row-span-2 rounded-3xl bg-background/[0.04] border border-background/10 p-6 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-background/50">First commit</span>
-          <p className="font-display text-6xl md:text-7xl font-medium">2011</p>
-          <p className="text-sm text-background/60">A blog about basset hounds. Still online, somehow.</p>
-        </div>
-
-        {/* Tags */}
-        <div className="col-span-2 row-span-2 rounded-3xl bg-background/[0.04] border border-background/10 p-6 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-background/50">Toolbelt</span>
-          <div className="flex flex-wrap gap-2">
-            {["TypeScript","React","Postgres","Rails","Vim","Tailwind","Linear","Node"].map(t => (
-              <span key={t} className="px-3 py-1 rounded-full bg-background/10 text-sm text-background/80" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{t}</span>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "10px",
+              paddingTop: "14px",
+              borderTop: "1px solid rgba(0,0,0,0.06)",
+            }}
+          >
+            {[
+              { v: "8+", l: "years" },
+              { v: "42", l: "shipped" },
+              { v: "11", l: "awards" },
+            ].map((s) => (
+              <div key={s.l}>
+                <div
+                  style={{
+                    fontSize: "24px",
+                    fontWeight: 600,
+                    letterSpacing: "-0.04em",
+                    lineHeight: 1,
+                    background: "linear-gradient(180deg,#1d1d1f,#86868b)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  {s.v}
+                </div>
+                <div
+                  style={{
+                    fontSize: "10px",
+                    color: "#86868b",
+                    marginTop: "4px",
+                    letterSpacing: "0.04em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {s.l}
+                </div>
+              </div>
             ))}
           </div>
-        </div>
 
-        {/* Quote */}
-        <div className="col-span-2 row-span-1 rounded-3xl bg-background/[0.04] border border-background/10 p-6 flex items-center">
-          <p className="text-sm text-background/70 leading-relaxed">"If it compiles, it ships." — every junior dev, including me, 2014.</p>
-        </div>
-
-        {/* Terminal stat row */}
-        <div className="col-span-6 row-span-1 rounded-3xl bg-background/[0.04] border border-background/10 px-8 grid grid-cols-4 items-center text-background/80" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-          <div><p className="text-xs text-background/40">commits</p><p className="text-2xl">12,408</p></div>
-          <div><p className="text-xs text-background/40">repos</p><p className="text-2xl">147</p></div>
-          <div><p className="text-xs text-background/40">prod incidents</p><p className="text-2xl">3</p></div>
-          <div><p className="text-xs text-background/40">cups of coffee</p><p className="text-2xl">∞</p></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────── SCREEN 2 — TRANSITION (split, dawn) ─────────── */
-function TransitionScreen() {
-  return (
-    <div className="shrink-0 w-screen h-screen px-8 md:px-16 py-24 bg-gradient-to-r from-[oklch(0.13_0.012_260)] via-[oklch(0.85_0.02_60)] to-[oklch(0.97_0.01_80)]">
-      <div className="h-full grid grid-cols-6 grid-rows-6 gap-4">
-        {/* Big poetic line */}
-        <div className="col-span-6 row-span-3 rounded-3xl bg-background/40 backdrop-blur-sm border border-background/30 p-10 md:p-16 flex items-center">
-          <h2 className="font-display text-5xl md:text-7xl leading-[1.05] tracking-tight text-ink">
-            Then one Tuesday I opened <span style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }} className="text-ink/70">Figma</span> — and never closed it.
-          </h2>
-        </div>
-
-        {/* Left card — leaving */}
-        <div className="col-span-2 row-span-3 rounded-3xl bg-[oklch(0.16_0.012_260)] text-background p-8 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-background/50">Leaving behind</span>
-          <ul className="space-y-2 text-background/80" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13 }}>
-            <li>// merge conflicts at 1am</li>
-            <li>// "it works on my machine"</li>
-            <li>// 800-line PR reviews</li>
-            <li>// shipping ugly things fast</li>
-          </ul>
-          <p className="text-sm text-background/60">— but keeping the rigor.</p>
-        </div>
-
-        {/* Middle card — bridge */}
-        <div className="col-span-2 row-span-3 rounded-3xl bg-background/60 backdrop-blur border border-background/40 p-8 flex flex-col items-center justify-center text-center">
-          <div className="w-16 h-16 rounded-full border border-ink/40 flex items-center justify-center mb-6">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12h16M14 6l6 6-6 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="text-ink"/></svg>
-          </div>
-          <p className="font-display text-2xl text-ink tracking-tight">The seam</p>
-          <p className="text-sm text-ink-soft mt-2 leading-relaxed">Where engineers stop and designers start — I just moved my desk into it.</p>
-        </div>
-
-        {/* Right card — arriving */}
-        <div className="col-span-2 row-span-3 rounded-3xl bg-[oklch(0.99_0.005_80)] border border-border p-8 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-ink-soft">Arriving at</span>
-          <ul className="space-y-2 text-ink/80 text-[14px] leading-relaxed">
-            <li>· slow thinking, fast iteration</li>
-            <li>· color and contrast and air</li>
-            <li>· typography as engineering</li>
-            <li>· interfaces that feel honest</li>
-          </ul>
-          <p className="text-sm text-ink-soft" style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: 18 }}>— a new kind of craft.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────── SCREEN 3 — DESIGNER (warm, editorial, light) ─────────── */
-function DesignerScreen() {
-  return (
-    <div className="shrink-0 w-screen h-screen px-8 md:px-16 py-24 bg-[oklch(0.985_0.005_85)] text-ink">
-      <div className="h-full grid grid-cols-6 grid-rows-6 gap-4">
-        {/* Title */}
-        <div className="col-span-4 row-span-2 rounded-3xl bg-surface p-10 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-ink-soft">Act 03</span>
-          <h2 className="font-display text-5xl md:text-6xl font-medium tracking-tight leading-[1.02]">
-            Now I design <span style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }} className="text-ink/70">quietly</span>, on purpose.
-          </h2>
-        </div>
-
-        {/* Palette */}
-        <div className="col-span-2 row-span-2 rounded-3xl bg-surface p-6 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-ink-soft">Today's palette</span>
-          <div className="flex gap-2 h-16">
-            {["oklch(0.99 0.005 85)","oklch(0.93 0.01 80)","oklch(0.78 0.04 60)","oklch(0.42 0.02 260)","oklch(0.12 0.005 260)"].map((c,i) => (
-              <div key={i} className="flex-1 rounded-xl border border-border" style={{ background: c }} />
-            ))}
-          </div>
-          <p className="text-sm text-ink-soft">Warm whites, ink black, one whisper of clay.</p>
-        </div>
-
-        {/* Type specimen */}
-        <div className="col-span-2 row-span-2 rounded-3xl bg-surface p-6 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-ink-soft">Type</span>
-          <div>
-            <p className="font-display text-4xl tracking-tight leading-none">Switzer</p>
-            <p className="text-sm text-ink-soft mt-1">Display · 500</p>
-            <p className="mt-3 text-lg" style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}>Instrument Serif</p>
-            <p className="text-sm text-ink-soft">Accent · regular italic</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+            {["Figma", "React", "TypeScript", "Motion", "Swift", "Rust"].map(
+              (t) => (
+                <span
+                  key={t}
+                  style={{
+                    fontSize: "11px",
+                    padding: "5px 10px",
+                    borderRadius: "999px",
+                    background: "#f5f5f7",
+                    border: "1px solid rgba(0,0,0,0.05)",
+                    color: "#1d1d1f",
+                  }}
+                >
+                  {t}
+                </span>
+              ),
+            )}
           </div>
         </div>
 
-        {/* Principles */}
-        <div className="col-span-2 row-span-3 rounded-3xl bg-surface p-8 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-ink-soft">House rules</span>
-          <ol className="space-y-3 text-ink/80 leading-relaxed">
-            <li><span className="text-ink-soft tabular-nums mr-2">01</span> Clarity beats cleverness.</li>
-            <li><span className="text-ink-soft tabular-nums mr-2">02</span> Whitespace is a feature.</li>
-            <li><span className="text-ink-soft tabular-nums mr-2">03</span> Motion has manners.</li>
-            <li><span className="text-ink-soft tabular-nums mr-2">04</span> Ship the rough edges, then sand.</li>
-          </ol>
-          <p className="text-sm text-ink-soft">Pinned above the desk, since 2022.</p>
-        </div>
-
-        {/* Big quote */}
-        <div className="col-span-2 row-span-3 rounded-3xl bg-ink text-background p-8 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-background/50">A working belief</span>
-          <p className="font-display text-3xl leading-tight tracking-tight">
-            "Design is just engineering with better manners."
-          </p>
-          <p className="text-sm text-background/60">— me, on a tuesday, probably wrong.</p>
-        </div>
-
-        {/* Today */}
-        <div className="col-span-2 row-span-3 rounded-3xl bg-surface p-8 flex flex-col justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-ink-soft">Currently</span>
-          <div>
-            <p className="font-display text-2xl tracking-tight">Senior Product Designer</p>
-            <p className="text-ink-soft">Grey Gray · Berlin</p>
-          </div>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div><p className="text-ink-soft">Shipped</p><p className="font-display text-2xl">38</p></div>
-            <div><p className="text-ink-soft">Years in</p><p className="font-display text-2xl">12</p></div>
-          </div>
+        {/* CTAs */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "12px",
+          }}
+        >
+          <button
+            style={{
+              ...cardBase,
+              padding: "16px",
+              background: "#1d1d1f",
+              color: "#ffffff",
+              fontSize: "14px",
+              fontWeight: 600,
+              border: "none",
+              cursor: "pointer",
+              letterSpacing: "-0.01em",
+              boxShadow: "0 10px 30px -10px rgba(0,0,0,0.4)",
+            }}
+          >
+            View Work →
+          </button>
+          <button
+            style={{
+              ...cardBase,
+              padding: "16px",
+              background: "#ffffff",
+              color: "#1d1d1f",
+              fontSize: "14px",
+              fontWeight: 500,
+              cursor: "pointer",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Contact me
+          </button>
         </div>
       </div>
     </div>
