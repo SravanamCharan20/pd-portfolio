@@ -94,6 +94,25 @@ function AboutPage() {
   const translateX = -horizProgress * 200; // 300vw track - 100vw viewport
 
   const chars = useMemo(() => REVEAL_TEXT.split(""), []);
+  const highlightRanges = useMemo(
+    () => {
+      const targets = [
+        { word: "code", color: "#22c55e", glow: "rgba(34, 197, 94, 0.32)" },
+        { word: "products", color: "#8b5cf6", glow: "rgba(139,92,246,0.28)" },
+        { word: "experience", color: "#f97316", glow: "rgba(249,115,22,0.28)" },
+        { word: "excited", color: "#ec4899", glow: "rgba(236,72,153,0.28)" },
+      ];
+      return targets.map((target) => {
+        const start = REVEAL_TEXT.indexOf(target.word);
+        return {
+          ...target,
+          start: start >= 0 ? start : 0,
+          end: start >= 0 ? start + target.word.length : 0,
+        };
+      });
+    },
+    [],
+  );
   const revealedCount = Math.floor(revealProgress * chars.length);
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -193,17 +212,23 @@ function AboutPage() {
           {/* Panel 1: text reveal */}
           <section className="h-screen w-screen shrink-0 bg-background flex items-center justify-center px-[8vw]">
             <p className="text-[3.2vw] leading-[1.15] font-medium tracking-tight text-foreground max-w-[84vw]">
-              {chars.map((c, i) => (
-                <span
-                  key={i}
-                  style={{
-                    opacity: i < revealedCount ? 1 : 0.12,
-                    transition: "opacity 120ms linear",
-                  }}
-                >
-                  {c}
-                </span>
-              ))}
+                {chars.map((c, i) => {
+                const range = highlightRanges.find((range) => i >= range.start && i < range.end);
+                const isVisible = i < revealedCount;
+                return (
+                  <span
+                    key={i}
+                    style={{
+                      opacity: isVisible ? 1 : 0.12,
+                      transition: "opacity 180ms ease, color 220ms ease, text-shadow 220ms ease",
+                      color: isVisible && range ? range.color : undefined,
+                      textShadow: isVisible && range ? `0 0 14px ${range.glow}` : undefined,
+                    }}
+                  >
+                    {c}
+                  </span>
+                );
+              })}
             </p>
           </section>
 

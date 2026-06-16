@@ -163,7 +163,7 @@ function Index() {
             <aside className="hero__aside hero-stagger" style={{ '--d': '0.4s' } as React.CSSProperties}>
               <div className="group/bio relative">
                 <p className="hero__bio transition-opacity duration-500 group-hover/bio:opacity-0">
-                  I&apos;m a product designer who loves turning complex problems into simple, meaningful experiences. Currently shaping products at Grey Gray, helping ideas come to life.
+                  I&apos;m a product designer who loves turning complex problems into simple, meaningful experiences. Currently shaping products and helping ideas come to life.
                 </p>
                 <div className="absolute inset-0 opacity-0 group-hover/bio:opacity-100 transition-all duration-500 pointer-events-none">
                   <p className="text-[0.6875rem] font-mono leading-relaxed text-ink-soft/70 tracking-wide">
