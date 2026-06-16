@@ -169,7 +169,7 @@
   .hero__headline {
     margin: 0;
     font-size: clamp(2.1rem, 5vw, 2.5rem);
-    font-weight: 700;
+    font-weight: 300;
     line-height: 1.06;
     letter-spacing: -0.03em;
     color: var(--hero-ink);

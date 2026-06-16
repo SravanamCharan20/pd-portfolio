@@ -189,7 +189,7 @@ function Index() {
         <section id="work" className="relative">
           {/* Sticky "Featured work" background */}
           <div className="sticky top-0 h-screen flex flex-col items-center justify-center pointer-events-none select-none z-0">
-            <h2 className="font-display font-light text-[14vw] md:text-[12vw] leading-none tracking-[-0.04em] text-ink">
+            <h2 className="font-display font-light text-[14vw] md:text-[12vw] leading-none tracking-[-0.08em] text-ink">
               Featured work
             </h2>
             <p className="mt-4 text-sm uppercase tracking-[0.2em] text-ink-soft">(Scroll to explore)</p>
@@ -200,7 +200,7 @@ function Index() {
             {projects.map((project, i) => {
               const isLink = !!project.href;
               const Tag: any = isLink ? "a" : "div";
-              const offsets = ["md:-translate-x-16 lg:-translate-x-24", "md:translate-x-12 lg:translate-x-20", "md:-translate-x-8 lg:-translate-x-14"];
+              const offsets = ["md:-translate-x-16 lg:-translate-x-84", "md:translate-x-12 lg:translate-x-60", "md:-translate-x-8 lg:-translate-x-54"];
               const offset = offsets[i % offsets.length];
               return (
                 <Tag
