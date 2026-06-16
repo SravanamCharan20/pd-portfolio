@@ -213,14 +213,29 @@ function TTDCaseStudy() {
           </header>
         </div>
         {/* HERO */}
-        <section className="px-8 md:px-16 pt-16 md:pt-24 pb-16">
-          <p className="text-sm text-ink-soft tracking-wider uppercase mb-6">UX Case Study · Civic Service · Mobile</p>
-          <h1 className="font-display font-light text-[7vw] sm:text-[10vw] md:text-[7vw] leading-[1.10] tracking-[-0.04em] text-ink max-w-7xl">
+        <section className="px-8 md:px-16 pt-16 md:pt-24 pb-16 overflow-hidden">
+          <style dangerouslySetInnerHTML={{ __html: `
+            @keyframes ttd-fade-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+            @keyframes ttd-line-grow{from{opacity:0;transform:scaleX(0)}to{opacity:1;transform:scaleX(1)}}
+            .ttd-hero-anim{opacity:0;animation:ttd-fade-up .8s cubic-bezier(.22,1,.36,1) var(--d,0s) forwards}
+            .ttd-line-reveal{opacity:0;transform:scaleX(0);animation:ttd-line-grow 1s cubic-bezier(.22,1,.36,1) .5s forwards}
+            .ttd-scroll-bounce{animation:bounce 2s infinite}
+            @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+          `}} />
+          <p className="ttd-hero-anim text-sm text-ink-soft tracking-wider uppercase mb-6" style={{ '--d': '0.1s' } as React.CSSProperties}>
+            UX Case Study · Civic Service · Mobile
+          </p>
+          <h1 className="ttd-hero-anim font-display font-light text-[7vw] sm:text-[10vw] md:text-[7vw] leading-[1.10] tracking-[-0.04em] text-ink max-w-7xl" style={{ '--d': '0.25s' } as React.CSSProperties}>
             Designing fairness into a ~900,000-person race
           </h1>
-          <p className="mt-10 text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed">
+          <div className="ttd-line-reveal mt-6 h-px bg-ink/10 max-w-2xl origin-left" />
+          <p className="ttd-hero-anim mt-8 text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed" style={{ '--d': '0.55s' } as React.CSSProperties}>
             A structural redesign of the TTD app's darshan booking flow — where the bottleneck was never server capacity, but the order of operations.
           </p>
+          <div className="ttd-hero-anim mt-12 flex items-center gap-3 text-ink-soft/50" style={{ '--d': '0.9s' } as React.CSSProperties}>
+            <div className="w-px h-8 bg-current ttd-scroll-bounce" />
+            <span className="text-xs tracking-wider uppercase">Scroll to explore</span>
+          </div>
         </section>
         {/* BODY w/ sidebar */}
         <div className="px-8 md:px-16 pb-32 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12 md:gap-20">

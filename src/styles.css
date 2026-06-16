@@ -90,6 +90,36 @@
     opacity: 0.55;
   }
 
+  @keyframes hero-fade-up {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes hero-note-in {
+    from { opacity: 0; transform: rotate(-8deg) scale(0.85); }
+    to { opacity: 1; transform: rotate(0deg) scale(1); }
+  }
+  @keyframes hero-photo-in {
+    from { opacity: 0; transform: rotate(-2.5deg) scale(0.92); }
+    to { opacity: 1; transform: rotate(-2.5deg) scale(1); }
+  }
+  @keyframes hero-draw {
+    from { stroke-dashoffset: var(--dash-len); }
+    to { stroke-dashoffset: 0; }
+  }
+
+  .hero-stagger { opacity: 0; animation: hero-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) forwards; }
+
+  .hero-arrow-line {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: hero-draw 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+  }
+  .hero-arrow-head {
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: hero-draw 0.4s cubic-bezier(0.22, 1, 0.36, 1) 1.8s forwards;
+  }
+
   .hero {
     position: relative;
     min-height: calc(100vh - 4.5rem);
@@ -165,6 +195,9 @@
       0 0, 100% 0, 100% 84%, 90% 92%, 74% 87%, 58% 94%,
       42% 88%, 26% 95%, 10% 90%, 0 96%
     );
+    opacity: 0;
+    animation: hero-note-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    transform-origin: bottom left;
   }
 
   .hero__note-list {
@@ -192,6 +225,20 @@
     width: min(100%, 16.875rem);
     z-index: 2;
     transform: rotate(-2.5deg);
+    opacity: 0;
+    animation: hero-photo-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+  }
+
+  .hero__photo-frame {
+    padding: 0.35rem;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.09);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+  }
+
+  .hero__photo:hover .hero__photo-frame {
+    transform: rotate(1.5deg) scale(1.03);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
   }
 
   .hero__tape {
@@ -205,12 +252,6 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
     transform: translateX(-50%) rotate(-1.5deg);
     opacity: 0.92;
-  }
-
-  .hero__photo-frame {
-    padding: 0.35rem;
-    background: #fff;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.09);
   }
 
   .hero__photo-img {

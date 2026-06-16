@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import React, { useState } from "react";
 import { FiCopy, FiExternalLink, FiCheck } from "react-icons/fi";
 import { FaBehance, FaDribbble, FaMedium, FaLinkedin } from "react-icons/fa6";
 import heroLandscape from "@/assets/hero-landscape.jpg";
@@ -104,7 +104,7 @@ function Index() {
 
       {/* Scrollable content sits above sticky footer */}
       <div className="relative z-10 hero-page" style={{ marginBottom: "100vh" }}>
-        <div className="sticky top-0 z-999 bg-background/10 backdrop-blur-md border-b border-border">
+        <div className="sticky top-0 z-999 bg-background/10 backdrop-blur-md">
           <header className="relative top-0 left-0 right-0 px-8 justify-between md:px-16 z-50 py-8 flex items-center">
             <a href="/" className="font-display text-xl font-medium">Charan</a>
 
@@ -125,7 +125,7 @@ function Index() {
 
         <section className="hero">
           <div className="hero-shell hero__stage">
-            <div className="hero__lead">
+            <div className="hero__lead hero-stagger" style={{ '--d': '0.1s' } as React.CSSProperties}>
               <h1 className="hero__headline">
                 Designing
                 <br />
@@ -158,7 +158,7 @@ function Index() {
               </figure>
             </div>
 
-            <aside className="hero__aside">
+            <aside className="hero__aside hero-stagger" style={{ '--d': '0.4s' } as React.CSSProperties}>
               <p className="hero__bio">
                 I&apos;m a product designer who loves turning complex problems into simple, meaningful experiences. Currently shaping products at Grey Gray, helping ideas come to life.
               </p>
@@ -169,6 +169,7 @@ function Index() {
                   stroke="currentColor"
                   strokeWidth="1"
                   strokeLinecap="round"
+                  className="hero-arrow-line"
                 />
                 <path
                   d="M282 5L296 10L282 15"
@@ -176,71 +177,63 @@ function Index() {
                   strokeWidth="1"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="hero-arrow-head"
                 />
               </svg>
             </aside>
           </div>
 
-          <div id="work" className="hero-shell hero__footer">
-            <h2 className="hero__work-title">Work</h2>
-            <span className="hero__work-meta">Selected — 2026</span>
-          </div>
         </section>
 
-        <section className="hero-shell pb-20 pt-20">
-          {projects.map((project, index) => {
-            const Wrapper: any = project.href ? "a" : "div";
-            return (
-              <div key={project.title}>
-                {index > 0 && <hr className="my-12 border-border" />}
-                <Wrapper
-                  {...(project.href ? { href: project.href } : {})}
-                  className="group grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.7fr_1fr] lg:gap-10 lg:items-start"
-                >
-                  <div>
-                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em] text-ink-soft">
-                      <span>0{index + 1}</span>
-                      <span>{project.eyebrow}</span>
-                    </div>
-                    <h3 className="mt-4 font-display text-3xl font-medium leading-tight tracking-tight text-ink md:text-4xl">
-                      {project.title}
-                    </h3>
-                    <div className="mt-3 flex items-center gap-3 text-sm text-ink-soft">
-                      <span>{project.role}</span>
-                      <span className="h-1 w-1 rounded-full bg-border" />
-                      <span>{project.year}</span>
-                    </div>
-                  </div>
+        {/* WORK — sticky title + scrolling cards */}
+        <section id="work" className="relative">
+          {/* Sticky "Featured work" background */}
+          <div className="sticky top-0 h-screen flex flex-col items-center justify-center pointer-events-none select-none z-0">
+            <h2 className="font-display font-light text-[14vw] md:text-[12vw] leading-none tracking-[-0.04em] text-ink">
+              Featured work
+            </h2>
+            <p className="mt-4 text-sm uppercase tracking-[0.2em] text-ink-soft">(Scroll to explore)</p>
+          </div>
 
-                  <div className="relative overflow-hidden rounded-2xl bg-surface-2">
-                    <img
-                      src={project.img}
-                      alt={project.title}
-                      loading="lazy"
-                      className="block w-full aspect-[4/3] object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
-                    />
-                    {project.href && (
-                      <span className="absolute right-4 top-4 inline-flex h-10 w-10 translate-y-1 items-center justify-center rounded-full bg-background/90 text-ink opacity-0 backdrop-blur transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                        <svg width="13" height="13" viewBox="0 0 12 12" fill="none" aria-hidden>
-                          <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+          {/* Cards that scroll over the title */}
+          <div className="relative z-10 -mt-[100vh] pt-[100vh] pb-[40vh] flex flex-col items-center gap-24 px-6 md:px-16">
+            {projects.map((project, i) => {
+              const isLink = !!project.href;
+              const Tag: any = isLink ? "a" : "div";
+              const offsets = ["md:-translate-x-16 lg:-translate-x-24", "md:translate-x-12 lg:translate-x-20", "md:-translate-x-8 lg:-translate-x-14"];
+              const offset = offsets[i % offsets.length];
+              return (
+                <Tag
+                  key={project.title}
+                  {...(isLink ? { href: project.href } : {})}
+                  className={`group relative w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl bg-surface-2 ${offset}`}
+                >
+                  <img
+                    src={project.img}
+                    alt={project.title}
+                    loading="lazy"
+                    className="block w-full aspect-[4/3] object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 md:p-10">
+                    <p className="text-white/70 text-sm uppercase tracking-[0.16em] mb-2">{project.eyebrow}</p>
+                    <h3 className="font-display text-2xl md:text-3xl font-semibold text-white mb-3 tracking-tight">{project.title}</h3>
+                    <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-lg mb-6">{project.summary}</p>
+                    {isLink && (
+                      <span className="inline-flex items-center gap-2 bg-white text-black text-sm font-medium px-5 py-2.5 rounded-full w-fit transition-transform duration-300 group-hover:translate-y-0">
+                        View case study
+                      </span>
+                    )}
+                    {!isLink && (
+                      <span className="inline-flex items-center gap-2 text-white/60 text-sm font-medium px-5 py-2.5 rounded-full border border-white/20 w-fit">
+                        In progress
                       </span>
                     )}
                   </div>
-
-                  <div className="lg:pt-1">
-                    <p className="text-[15px] leading-relaxed text-ink-soft">{project.summary}</p>
-                    <p className="mt-6 text-xs uppercase tracking-[0.16em] text-ink-soft">Contribution</p>
-                    <p className="mt-2 text-sm leading-relaxed text-ink">{project.contribution}</p>
-                    <div className="mt-6 flex items-center gap-3 text-sm text-ink">
-                      <span>{project.href ? "View case study" : "In progress"}</span>
-                      {project.href && <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>}
-                    </div>
-                  </div>
-                </Wrapper>
-              </div>
-            );
-          })}
+                </Tag>
+              );
+            })}
+          </div>
         </section>
       </div>
 
