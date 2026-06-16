@@ -14,7 +14,7 @@ export const Route = createFileRoute("/about")({
 });
 
 const REVEAL_TEXT =
-  "My career began with <span className="code">code</span>. Building products taught me how systems work, how ideas become reality, and how technology solves problems. Along the way, I discovered that what excited me most wasn't just building features—it was shaping the experience behind them."
+  "My career began with code. Building products taught me how systems work, how ideas become reality, and how technology solves problems. Along the way, I discovered that what excited me most wasn't just building features—it was shaping the experience behind them."
 function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
