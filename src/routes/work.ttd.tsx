@@ -31,20 +31,26 @@ const sections = [
 const ttdStripCSS = `
 .ttd-screen-iframe{transform:scale(${220/375});transform-origin:top left}
 @media(min-width:640px){.ttd-screen-iframe{transform:scale(${260/375})}}
-@media(min-width:768px){.ttd-screen-iframe{transform:scale(${300/375})}}
+@media(min-width:768px){.ttd-screen-iframe{transform:scale(${220/375})}}
+@media(min-width:1536px){.ttd-screen-iframe{transform:scale(${300/375})}}
 `;
 
 function TTDScreenStrip({ screens, caption }: { screens: { id: string; label?: string }[]; caption: string }) {
+  const gridCols = screens.length === 2 ? 'md:grid-cols-2'
+    : screens.length === 3 ? 'md:grid-cols-3'
+    : screens.length === 4 ? 'md:grid-cols-2'
+    : 'md:grid-cols-3';
+
   return (
     <div className="mb-8">
       <style dangerouslySetInnerHTML={{ __html: ttdStripCSS }} />
-      <div className="-mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden bg-[#ECEFF1] p-4 sm:p-8 md:p-12">
-        <div className="flex items-start justify-start sm:justify-center gap-4 sm:gap-8 overflow-x-auto pb-2 snap-x snap-mandatory">
+      <div className="-mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden bg-[#ECEFF1] p-4 sm:p-8 md:p-8">
+        <div className={`flex items-start gap-4 sm:gap-8 overflow-x-auto pb-2 snap-x snap-mandatory md:grid ${gridCols} md:gap-6 md:overflow-visible md:snap-none md:pb-0 md:justify-items-center`}>
           {screens.map((s, i) => (
             <div key={i} className="flex flex-col items-center shrink-0 snap-center">
               <div className="bg-[#111] rounded-[1.8rem] sm:rounded-[2.2rem] p-2 sm:p-2.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)]">
                 <div
-                  className="relative overflow-hidden rounded-[1.4rem] sm:rounded-[1.8rem] bg-white w-[220px] sm:w-[260px] md:w-[300px]"
+                  className="relative overflow-hidden rounded-[1.4rem] sm:rounded-[1.8rem] bg-white w-[220px] sm:w-[260px] md:w-[220px] 2xl:w-[300px]"
                   style={{ aspectRatio: "375/780" }}
                 >
                   <iframe
@@ -242,7 +248,7 @@ function TTDCaseStudy() {
           </aside>
 
           {/* CONTENT */}
-          <article className="w-full space-y-24">
+          <article className="min-w-0 w-full space-y-24">
             {/* OVERVIEW */}
             <section ref={setRef("overview")} id="overview" className="scroll-mt-24">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 sm:gap-y-8 mb-12">
