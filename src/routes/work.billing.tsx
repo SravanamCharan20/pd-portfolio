@@ -171,17 +171,10 @@ function OmakaseCaseStudy() {
 
       <div className="bg-background min-h-screen">
         {/* NAV */}
-        <div className="relative top-0 bg-background/10 backdrop-blur-md border-b border-border">
-          <header className="relative top-0 left-0 right-0 px-8 justify-between md:px-16 z-50 py-8 flex items-center">
+        <div className="relative top-0 md:hidden bg-background/80 backdrop-blur-md border-b border-border">
+          <header className="px-6 py-6 flex items-center justify-between">
             <a href="/" className="font-display text-xl font-medium">Charan</a>
-
-            <nav className="hidden md:flex items-center gap-10 text-sm text-ink-soft ml-6">
-              <a href="/#work" className="hover:text-ink transition-colors">Work</a>
-              <a href="/about" className="hover:text-ink text-semibold transition-colors">About</a>
-              <a href="/contact" className="hover:text-ink transition-colors">Contact</a>
-            </nav>
-
-            <button className="md:hidden ml-auto p-2" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
+            <button className="p-2" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
               </svg>
@@ -189,6 +182,14 @@ function OmakaseCaseStudy() {
 
           </header>
         </div>
+
+        <nav className="hidden md:flex fixed top-6 left-1/2 -translate-x-1/2 z-[60] items-center gap-1 px-2 py-2 rounded-full bg-black/[0.06] backdrop-blur-xl shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_8px_40px_-12px_rgba(0,0,0,0.1)] pill-nav">
+          <a href="/" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">Charan</a>
+          <span className="w-px h-3.5 bg-black/10" />
+          <a href="/#work" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/90 bg-black/[0.06] transition-all duration-200">Work</a>
+          <a href="/about" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">About</a>
+          <a href="/contact" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">Contact</a>
+        </nav>
 
         {/* HERO */}
         <section className="px-8 md:px-16 pt-16 md:pt-24 pb-16 overflow-hidden">

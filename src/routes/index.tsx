@@ -104,24 +104,26 @@ function Index() {
 
       {/* Scrollable content sits above sticky footer */}
       <div className="relative z-10 hero-page" style={{ marginBottom: "100vh" }}>
-        <div className="sticky top-0 z-999 bg-background/10 backdrop-blur-md">
-          <header className="relative top-0 left-0 right-0 px-8 justify-between md:px-16 z-50 py-8 flex items-center">
+        {/* Mobile header */}
+        <div className="md:hidden sticky top-0 z-[60] bg-background/80 backdrop-blur-md">
+          <header className="px-6 py-6 flex items-center justify-between">
             <a href="/" className="font-display text-xl font-medium">Charan</a>
-
-            <nav className="hidden md:flex items-center gap-10 text-sm text-ink-soft ml-6">
-              <a href="/#work" className="hover:text-ink transition-colors">Work</a>
-              <a href="/about" className="hover:text-ink text-semibold transition-colors">About</a>
-              <a href="/contact" className="hover:text-ink transition-colors">Contact</a>
-            </nav>
-
-            <button className="md:hidden ml-auto p-2" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
+            <button className="p-2" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
               </svg>
             </button>
-
           </header>
         </div>
+
+        {/* Desktop floating pill navbar */}
+        <nav className="hidden md:flex fixed top-6 left-1/2 -translate-x-1/2 z-[60] items-center gap-1 px-2 py-2 rounded-full bg-black/[0.06] backdrop-blur-xl shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_8px_40px_-12px_rgba(0,0,0,0.1)] pill-nav">
+          <a href="/" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/90 hover:bg-black/[0.06] transition-all duration-200">Charan</a>
+          <span className="w-px h-3.5 bg-black/10" />
+          <a href="/#work" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">Work</a>
+          <a href="/about" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">About</a>
+          <a href="/contact" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">Contact</a>
+        </nav>
 
         <section className="hero">
           <div className="hero-shell hero__stage">
@@ -159,9 +161,22 @@ function Index() {
             </div>
 
             <aside className="hero__aside hero-stagger" style={{ '--d': '0.4s' } as React.CSSProperties}>
-              <p className="hero__bio">
-                I&apos;m a product designer who loves turning complex problems into simple, meaningful experiences. Currently shaping products at Grey Gray, helping ideas come to life.
-              </p>
+              <div className="group/bio relative">
+                <p className="hero__bio transition-opacity duration-500 group-hover/bio:opacity-0">
+                  I&apos;m a product designer who loves turning complex problems into simple, meaningful experiences. Currently shaping products at Grey Gray, helping ideas come to life.
+                </p>
+                <div className="absolute inset-0 opacity-0 group-hover/bio:opacity-100 transition-all duration-500 pointer-events-none">
+                  <p className="text-[0.6875rem] font-mono leading-relaxed text-ink-soft/70 tracking-wide">
+                    <span className="text-emerald-600/80">const</span> charan = {"{"}<br />
+                    &nbsp;&nbsp;stack: [<span className="text-amber-600/80">&apos;Figma&apos;</span>, <span className="text-amber-600/80">&apos;React&apos;</span>, <span className="text-amber-600/80">&apos;Tailwind&apos;</span>, <span className="text-amber-600/80">&apos;Framer&apos;</span>],<br />
+                    &nbsp;&nbsp;focus: <span className="text-amber-600/80">&apos;product design&apos;</span>,<br />
+                    &nbsp;&nbsp;location: <span className="text-amber-600/80">&apos;Bengaluru, IN&apos;</span>,<br />
+                    &nbsp;&nbsp;open_to: <span className="text-amber-600/80">&apos;full-time &amp; contract&apos;</span>,<br />
+                    &nbsp;&nbsp;status: <span className="text-emerald-600/80">&apos;available&apos;</span><br />
+                    {"}"};
+                  </p>
+                </div>
+              </div>
               <p className="hero__cta">Let&apos;s create something great together.</p>
               <svg className="hero__arrow" viewBox="0 0 300 20" fill="none" aria-hidden="true">
                 <path
@@ -240,61 +255,60 @@ function Index() {
       {/* sticky footer revealed underneath */}
       <footer
         id="contact"
-        className="fixed inset-x-0 bottom-0 md:h-screen h-auto bg-black text-white flex items-center justify-center z-0 pt-12 pb-20 md:pb-0"
+        className="fixed inset-x-0 bottom-0 md:h-screen h-auto bg-[#0a0a0a] text-white flex items-center justify-center z-0 pt-12 pb-20 md:pb-0"
       >
-        <div className="w-full max-w-4xl px-6 md:px-16 text-center">
-          {/* Main heading */}
-          <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-tight mb-8 md:mb-16">
-            Open to roles. Feel free to say hello.
-          </h2>
-
-          {/* Email with copy button: stacked on mobile */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 md:mb-16">
-            <span className="text-base sm:text-lg md:text-xl text-white/90 break-words">sravanamcharan20@gmail.com</span>
-            <button
-              onClick={handleCopyEmail}
-              className={`px-4 py-2 rounded-full font-medium text-sm transition-all cursor-pointer flex items-center gap-2 ${
-                copied ? "bg-green-500 text-white hover:bg-green-600" : "bg-white text-black hover:bg-gray-100"
-              }`}
-              aria-pressed={copied}
-            >
-              {copied ? (
-                <>
-                  <FiCheck size={16} />
-                  Copied
-                </>
-              ) : (
-                <>
-                  <FiCopy size={16} />
-                  Copy
-                </>
-              )}
-            </button>
+        <div className="w-full max-w-5xl px-6 md:px-16">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-12 md:gap-16 mb-16 md:mb-24">
+            <div className="flex-1">
+              <p className="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">Get in touch</p>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-semibold leading-[1.02] tracking-tight">
+                Let&apos;s work
+                <br />
+                together.
+              </h2>
+            </div>
+            <div className="flex flex-col items-start md:items-end gap-3">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_theme(colors.emerald.400)]" />
+                <span className="text-sm text-white/60">Available for new projects</span>
+              </div>
+              <a
+                href="mailto:sravanamcharan20@gmail.com"
+                className="text-lg md:text-xl font-medium text-white hover:text-white/70 transition-colors"
+              >
+                sravanamcharan20@gmail.com
+              </a>
+              <button
+                onClick={handleCopyEmail}
+                className={`mt-1 px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+                  copied ? "bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30" : "bg-white/10 text-white/70 hover:bg-white/15 ring-1 ring-white/10"
+                }`}
+              >
+                {copied ? <><FiCheck size={12} /> Copied</> : <><FiCopy size={12} /> Copy email</>}
+              </button>
+            </div>
           </div>
 
-          {/* Social links: full-width pills on small screens */}
-          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 md:gap-6">
-            {[
-              { name: "Behance", url: "https://behance.net", icon: FaBehance, color: "#1769FF" },
-              { name: "Dribbble", url: "https://dribbble.com", icon: FaDribbble, color: "#EA4C89" },
-              { name: "Medium", url: "https://medium.com", icon: FaMedium, color: "#00AB6C" },
-              { name: "Linkedin", url: "https://linkedin.com", icon: FaLinkedin, color: "#0A66C2" },
-              { name: "Resume", url: "#", icon: FiExternalLink, color: "#6B6B6B" },
-            ].map((link) => {
-              const IconComponent = link.icon as any;
-              return (
+          <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-6">
+              {[
+                { name: "Behance", url: "https://behance.net" },
+                { name: "Dribbble", url: "https://dribbble.com" },
+                { name: "Medium", url: "https://medium.com" },
+                { name: "LinkedIn", url: "https://linkedin.com" },
+              ].map((link) => (
                 <a
                   key={link.name}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto max-w-xs px-6 py-3 rounded-full bg-white text-black font-medium text-sm hover:bg-gray-100 transition-colors flex items-center gap-2 justify-center"
+                  className="text-sm text-white/40 hover:text-white transition-colors"
                 >
-                  <IconComponent size={18} color={link.color} />
                   {link.name}
                 </a>
-              );
-            })}
+              ))}
+            </div>
+            <p className="text-xs text-white/25">&copy; {new Date().getFullYear()} Charan</p>
           </div>
         </div>
       </footer>

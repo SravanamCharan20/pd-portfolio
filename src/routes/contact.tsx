@@ -1,104 +1,43 @@
 /* eslint-disable prettier/prettier */
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import Lenis from "lenis";
+import { useState } from "react";
+import { FiCopy, FiCheck, FiArrowUpRight } from "react-icons/fi";
+import { FaBehance, FaDribbble, FaMedium, FaLinkedin } from "react-icons/fa6";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact me" },
+      { title: "Contact — Charan" },
       { name: "description", content: "Let's work together — get in touch." },
     ],
   }),
   component: ContactPage,
 });
 
+const socials = [
+  { name: "Behance", url: "https://behance.net", icon: FaBehance },
+  { name: "Dribbble", url: "https://dribbble.com", icon: FaDribbble },
+  { name: "Medium", url: "https://medium.com", icon: FaMedium },
+  { name: "LinkedIn", url: "https://linkedin.com", icon: FaLinkedin },
+];
+
 function ContactPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [vw, setVw] = useState<number>(typeof window !== "undefined" ? window.innerWidth : 1280);
-  const [vh, setVh] = useState<number>(typeof window !== "undefined" ? window.innerHeight : 800);
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    const onResize = () => {
-      setVw(window.innerWidth);
-      setVh(window.innerHeight);
-    };
-    onResize();
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  const isMobile = vw < 640;
-  const isTablet = vw >= 640 && vw < 1024;
-
+  const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.4,
-      smoothWheel: true,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
-    let rafId = 0;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
-    return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
-    };
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you'd typically send the form data to a server
-    setSubmitted(true);
-    setTimeout(() => {
-      setFormState({ name: "", email: "", subject: "", message: "" });
-      setSubmitted(false);
-    }, 3000);
+  const handleCopy = () => {
+    navigator.clipboard.writeText("sravanamcharan20@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const cardBase: React.CSSProperties = {
-    background: "#ffffff",
-    border: "1px solid rgba(0,0,0,0.06)",
-    borderRadius: "28px",
-    boxShadow:
-      "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.04), 0 30px 60px -20px rgba(0,0,0,0.08)",
-    color: "#1d1d1f",
-    overflow: "hidden",
-    position: "relative",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    fontSize: "11px",
-    letterSpacing: "0.28em",
-    color: "#86868b",
-    textTransform: "uppercase",
-    fontWeight: 500,
-  };
-
-  if (isMobile) {
-    return <MobileContact />;
-  }
 
   return (
     <>
-      {/* Mobile bottom-sheet menu */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=La+Belle+Aurore&display=swap" />
+
+      {/* Mobile menu */}
       <div
         className={`fixed inset-0 z-[100] md:hidden flex items-end ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
         role="dialog"
@@ -133,710 +72,110 @@ function ContactPage() {
         </div>
       </div>
 
-      <div ref={containerRef} className="relative bg-background">
-      {/* Header */}
-      <div className="sticky top-0 z-999 bg-background/10 backdrop-blur-md border-b border-border">
-        <header className="relative top-0 left-0 right-0 px-8 justify-between md:px-16 z-50 py-8 flex items-center">
-          <a href="/" className="font-display text-xl font-medium">Charan</a>
-
-          <nav className="hidden md:flex items-center gap-10 text-sm text-ink-soft ml-6">
-            <a href="/#work" className="hover:text-ink transition-colors">Work</a>
-            <a href="/about" className="hover:text-ink text-semibold transition-colors">About</a>
-            <a href="/contact" className="hover:text-ink text-blue-600 transition-colors">Contact</a>
-          </nav>
-
-          <button className="md:hidden ml-auto p-2" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-            </svg>
-          </button>
-
-        </header>
-      </div>
-
-      {/* Hero intro */}
-      <section className="relative min-h-[60vh] flex items-center justify-center px-8 md:px-16 py-20">
-        <div className="max-w-3xl">
-          <h1 className="text-[8vw] md:text-[6vw] font-semibold tracking-tight text-foreground leading-[1.1] mb-8">
-            Let's build something
-            <span
-              style={{
-                backgroundImage:
-                  "linear-gradient(95deg, #FF5E3A 0%, #FF9500 18%, #FFCC00 34%, #34C759 52%, #5AC8FA 70%, #007AFF 84%, #AF52DE 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                color: "transparent",
-              }}
-            >
-              {" "}together
-            </span>
-          </h1>
-          <p
-            style={{
-              fontSize: "1.4vw",
-              lineHeight: 1.6,
-              color: "#86868b",
-              maxWidth: "80vw",
-            }}
-          >
-            I'm always interested in hearing about new projects and opportunities. Whether you have a question or just want to say hi, feel free to get in touch.
-          </p>
-        </div>
-      </section>
-
-      {/* Main contact section */}
-      <section className="px-8 md:px-16 py-20 max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Contact form */}
-          <div>
-            <div style={labelStyle} className="mb-6">Contact Information</div>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label
-                  htmlFor="name"
-                  style={{
-                    display: "block",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    marginBottom: "8px",
-                    color: "#1d1d1f",
-                  }}
-                >
-                  Full Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  value={formState.name}
-                  onChange={handleChange}
-                  required
-                  style={{
-                    width: "100%",
-                    padding: "14px 16px",
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: "12px",
-                    fontSize: "15px",
-                    background: "#ffffff",
-                    color: "#1d1d1f",
-                    transition: "border-color 200ms",
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = "rgba(0,0,0,0.2)")}
-                  onBlur={(e) => (e.target.style.borderColor = "rgba(0,0,0,0.08)")}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  style={{
-                    display: "block",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    marginBottom: "8px",
-                    color: "#1d1d1f",
-                  }}
-                >
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formState.email}
-                  onChange={handleChange}
-                  required
-                  style={{
-                    width: "100%",
-                    padding: "14px 16px",
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: "12px",
-                    fontSize: "15px",
-                    background: "#ffffff",
-                    color: "#1d1d1f",
-                    transition: "border-color 200ms",
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = "rgba(0,0,0,0.2)")}
-                  onBlur={(e) => (e.target.style.borderColor = "rgba(0,0,0,0.08)")}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="subject"
-                  style={{
-                    display: "block",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    marginBottom: "8px",
-                    color: "#1d1d1f",
-                  }}
-                >
-                  Subject
-                </label>
-                <input
-                  id="subject"
-                  name="subject"
-                  type="text"
-                  value={formState.subject}
-                  onChange={handleChange}
-                  required
-                  style={{
-                    width: "100%",
-                    padding: "14px 16px",
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: "12px",
-                    fontSize: "15px",
-                    background: "#ffffff",
-                    color: "#1d1d1f",
-                    transition: "border-color 200ms",
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = "rgba(0,0,0,0.2)")}
-                  onBlur={(e) => (e.target.style.borderColor = "rgba(0,0,0,0.08)")}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="message"
-                  style={{
-                    display: "block",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    marginBottom: "8px",
-                    color: "#1d1d1f",
-                  }}
-                >
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={6}
-                  value={formState.message}
-                  onChange={handleChange}
-                  required
-                  style={{
-                    width: "100%",
-                    padding: "14px 16px",
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: "12px",
-                    fontSize: "15px",
-                    background: "#ffffff",
-                    color: "#1d1d1f",
-                    fontFamily: "inherit",
-                    resize: "none",
-                    transition: "border-color 200ms",
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = "rgba(0,0,0,0.2)")}
-                  onBlur={(e) => (e.target.style.borderColor = "rgba(0,0,0,0.08)")}
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submitted}
-                style={{
-                  ...cardBase,
-                  width: "100%",
-                  padding: "16px 24px",
-                  background: "#1d1d1f",
-                  color: "#ffffff",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  border: "none",
-                  cursor: submitted ? "default" : "pointer",
-                  letterSpacing: "-0.01em",
-                  boxShadow: "0 10px 30px -10px rgba(0,0,0,0.4)",
-                  transition: "all 300ms ease",
-                  opacity: submitted ? 0.8 : 1,
-                }}
-              >
-                {submitted ? "Message sent! 🎉" : "Send Message"}
-              </button>
-            </form>
-          </div>
-
-          {/* Contact info cards */}
-          <div className="space-y-6">
-            {/* Direct contact */}
-            <div style={{ ...cardBase, padding: "32px 28px" }}>
-              <div style={labelStyle} className="mb-4">Email</div>
-              <a
-                href="mailto:hey@charan.dev"
-                style={{
-                  display: "block",
-                  fontSize: "24px",
-                  fontWeight: 600,
-                  color: "#1d1d1f",
-                  textDecoration: "none",
-                  marginBottom: "16px",
-                  transition: "color 200ms",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#86868b")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#1d1d1f")}
-              >
-                hey@charan.dev
-              </a>
-              <p style={{ fontSize: "14px", color: "#86868b", lineHeight: 1.6 }}>
-                Drop me an email anytime. I usually reply within 24 hours.
-              </p>
-            </div>
-
-            {/* Social links */}
-            <div style={{ ...cardBase, padding: "32px 28px" }}>
-              <div style={labelStyle} className="mb-6">Social</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                {[
-                  { name: "Twitter", url: "https://twitter.com", icon: "𝕏" },
-                  { name: "LinkedIn", url: "https://linkedin.com", icon: "in" },
-                  { name: "Dribbble", url: "https://dribbble.com", icon: "🏀" },
-                  { name: "GitHub", url: "https://github.com", icon: "↗" },
-                ].map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      padding: "12px 14px",
-                      borderRadius: "8px",
-                      background: "#f5f5f7",
-                      border: "1px solid rgba(0,0,0,0.05)",
-                      textDecoration: "none",
-                      color: "#1d1d1f",
-                      fontSize: "14px",
-                      fontWeight: 500,
-                      transition: "all 200ms",
-                      cursor: "pointer",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "#ffffff";
-                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,0,0,0.2)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "#f5f5f7";
-                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,0,0,0.05)";
-                    }}
-                  >
-                    <span style={{ fontSize: "16px" }}>{social.icon}</span>
-                    {social.name}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Location & availability */}
-            <div style={{ ...cardBase, padding: "32px 28px" }}>
-              <div style={labelStyle} className="mb-4">Status</div>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-                <span
-                  style={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "999px",
-                    background: "#34d399",
-                    boxShadow: "0 0 12px #34d399",
-                  }}
-                />
-                <span style={{ fontSize: "14px", fontWeight: 500, color: "#1d1d1f" }}>
-                  Available for new projects
-                </span>
-              </div>
-              <p style={{ fontSize: "14px", color: "#86868b", lineHeight: 1.6 }}>
-                Based in Bengaluru, India. Open to remote collaboration and occasional travel for in-person sessions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer CTA */}
-      <section
-        style={{
-          background: "linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 100%)",
-          padding: "60px 32px",
-          marginTop: "60px",
-          textAlign: "center",
-          borderTop: "1px solid rgba(0,0,0,0.06)",
-        }}
-      >
-        <h2
-          style={{
-            fontSize: "2.8vw",
-            fontWeight: 600,
-            color: "#1d1d1f",
-            marginBottom: "16px",
-            letterSpacing: "-0.03em",
-          }}
-        >
-          Let's create something meaningful
-        </h2>
-        <p style={{ fontSize: "1.1vw", color: "#86868b", marginBottom: "32px", letterSpacing: "-0.01em" }}>
-          Whether it's a quick chat or a full project, I'm here to help bring your ideas to life.
-        </p>
-        <a
-          href="mailto:hey@charan.dev"
-          style={{
-            display: "inline-block",
-            padding: "16px 32px",
-            background: "#1d1d1f",
-            color: "#ffffff",
-            borderRadius: "999px",
-            textDecoration: "none",
-            fontSize: "16px",
-            fontWeight: 600,
-            transition: "all 300ms ease",
-            boxShadow: "0 10px 30px -10px rgba(0,0,0,0.4)",
-            cursor: "pointer",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-            (e.currentTarget as HTMLElement).style.boxShadow = "0 15px 40px -10px rgba(0,0,0,0.5)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-            (e.currentTarget as HTMLElement).style.boxShadow = "0 10px 30px -10px rgba(0,0,0,0.4)";
-          }}
-        >
-          Get in touch →
-        </a>
-      </section>
-    </div>
-    </>
-  );
-}
-
-function MobileContact() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setFormState({ name: "", email: "", subject: "", message: "" });
-      setSubmitted(false);
-    }, 3000);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const cardBase: React.CSSProperties = {
-    background: "#ffffff",
-    border: "1px solid rgba(0,0,0,0.06)",
-    borderRadius: "20px",
-    boxShadow:
-      "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.04), 0 20px 40px -20px rgba(0,0,0,0.08)",
-    color: "#1d1d1f",
-    overflow: "hidden",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    fontSize: "10px",
-    letterSpacing: "0.28em",
-    color: "#86868b",
-    textTransform: "uppercase",
-    fontWeight: 500,
-  };
-
-  return (
-    <>
-      {/* Mobile bottom-sheet menu */}
-      <div
-        className={`fixed inset-0 z-[100] flex items-end ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
-        role="dialog"
-        aria-modal={menuOpen}
-        aria-label="Main menu"
-      >
-        <button
-          className={`absolute inset-0 bg-black transition-opacity duration-300 ${menuOpen ? "opacity-60" : "opacity-0"}`}
-          onClick={() => setMenuOpen(false)}
-          aria-hidden="true"
-          tabIndex={menuOpen ? 0 : -1}
-        />
-        <div
-          className={`relative w-full bg-white text-black rounded-t-3xl p-6 pb-10 transition-transform duration-500 ${menuOpen ? "translate-y-0" : "translate-y-full"}`}
-          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="w-10 h-1 bg-black/20 rounded-full mx-auto mb-6" />
-          <div className="flex items-center justify-between mb-8">
-            <a href="/" className="font-display text-lg font-medium">Charan</a>
-            <button onClick={() => setMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
-            </button>
-          </div>
-          <nav className="flex flex-col gap-5">
-            <a href="/#work" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Work</a>
-            <a href="/about" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">About</a>
-            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-xl font-medium py-1">Contact</a>
-          </nav>
-        </div>
-      </div>
-
-      <div style={{ background: "#ffffff", minHeight: "100vh" }}>
-        {/* Header */}
-        <div style={{ padding: "16px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
-            <a href="/" style={{ fontSize: "18px", fontWeight: 600, textDecoration: "none", color: "#1d1d1f" }}>
-              Charan
-            </a>
+      <div className="min-h-screen bg-background flex flex-col">
+        {/* Mobile header */}
+        <div className="md:hidden sticky top-0 z-50 bg-background/80 backdrop-blur-md">
+          <header className="px-6 py-6 flex items-center justify-between">
+            <a href="/" className="font-display text-xl font-medium">Charan</a>
             <button className="p-2" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
               </svg>
             </button>
-          </div>
+          </header>
         </div>
 
-        {/* Hero */}
-      <div style={{ padding: "32px 16px" }}>
-        <h1 style={{ fontSize: "36px", fontWeight: 600, lineHeight: 1.2, marginBottom: "16px", color: "#1d1d1f" }}>
-          Let's build something together
-        </h1>
-        <p style={{ fontSize: "15px", color: "#86868b", lineHeight: 1.6 }}>
-          I'm always interested in hearing about new projects and opportunities.
-        </p>
-      </div>
+        {/* Desktop floating pill navbar */}
+        <nav className="hidden md:flex fixed top-6 left-1/2 -translate-x-1/2 z-[60] items-center gap-1 px-2 py-2 rounded-full bg-black/[0.06] backdrop-blur-xl shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_8px_40px_-12px_rgba(0,0,0,0.1)] pill-nav">
+          <a href="/" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">Charan</a>
+          <span className="w-px h-3.5 bg-black/10" />
+          <a href="/#work" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">Work</a>
+          <a href="/about" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">About</a>
+          <a href="/contact" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/90 bg-black/[0.06] transition-all duration-200">Contact</a>
+        </nav>
 
-      {/* Contact form */}
-      <div style={{ padding: "20px 16px 32px" }}>
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <div>
-            <label
-              htmlFor="name"
-              style={{
-                display: "block",
-                fontSize: "12px",
-                fontWeight: 500,
-                marginBottom: "6px",
-                color: "#1d1d1f",
-              }}
-            >
-              Full Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={formState.name}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                border: "1px solid rgba(0,0,0,0.08)",
-                borderRadius: "10px",
-                fontSize: "15px",
-                background: "#f5f5f7",
-                color: "#1d1d1f",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
+        {/* Content */}
+        <main className="flex-1 flex items-center justify-center px-6 md:px-16 py-16 md:py-0">
+          <div className="w-full max-w-3xl">
+            {/* Headline */}
+            <div className="mb-16 md:mb-20">
+              <p className="text-xs uppercase tracking-[0.2em] text-ink-soft mb-4">Contact</p>
+              <h1 className="font-display text-[clamp(2.2rem,6vw,4.5rem)] font-semibold leading-[1.05] tracking-tight text-ink mb-6">
+                Say hello.
+              </h1>
+              <p className="text-base md:text-lg text-ink-soft leading-relaxed max-w-lg">
+                Whether you have a project in mind, want to collaborate, or just want to chat — I&apos;d love to hear from you.
+              </p>
+            </div>
 
-          <div>
-            <label
-              htmlFor="email"
-              style={{
-                display: "block",
-                fontSize: "12px",
-                fontWeight: 500,
-                marginBottom: "6px",
-                color: "#1d1d1f",
-              }}
-            >
-              Email Address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formState.email}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                border: "1px solid rgba(0,0,0,0.08)",
-                borderRadius: "10px",
-                fontSize: "15px",
-                background: "#f5f5f7",
-                color: "#1d1d1f",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="subject"
-              style={{
-                display: "block",
-                fontSize: "12px",
-                fontWeight: 500,
-                marginBottom: "6px",
-                color: "#1d1d1f",
-              }}
-            >
-              Subject
-            </label>
-            <input
-              id="subject"
-              name="subject"
-              type="text"
-              value={formState.subject}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                border: "1px solid rgba(0,0,0,0.08)",
-                borderRadius: "10px",
-                fontSize: "15px",
-                background: "#f5f5f7",
-                color: "#1d1d1f",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="message"
-              style={{
-                display: "block",
-                fontSize: "12px",
-                fontWeight: 500,
-                marginBottom: "6px",
-                color: "#1d1d1f",
-              }}
-            >
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={5}
-              value={formState.message}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                border: "1px solid rgba(0,0,0,0.08)",
-                borderRadius: "10px",
-                fontSize: "15px",
-                background: "#f5f5f7",
-                color: "#1d1d1f",
-                fontFamily: "inherit",
-                resize: "none",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={submitted}
-            style={{
-              ...cardBase,
-              width: "100%",
-              padding: "14px 16px",
-              background: "#1d1d1f",
-              color: "#ffffff",
-              fontSize: "14px",
-              fontWeight: 600,
-              border: "none",
-              cursor: submitted ? "default" : "pointer",
-              marginTop: "8px",
-            }}
-          >
-            {submitted ? "Message sent! 🎉" : "Send Message"}
-          </button>
-        </form>
-
-        {/* Direct contact cards */}
-        <div style={{ marginTop: "32px", display: "flex", flexDirection: "column", gap: "12px" }}>
-          <div style={{ ...cardBase, padding: "20px" }}>
-            <div style={labelStyle} className="mb-3">Email</div>
-            <a
-              href="mailto:hey@charan.dev"
-              style={{
-                display: "block",
-                fontSize: "18px",
-                fontWeight: 600,
-                color: "#1d1d1f",
-                textDecoration: "none",
-              }}
-            >
-              hey@charan.dev
-            </a>
-          </div>
-
-          <div style={{ ...cardBase, padding: "20px" }}>
-            <div style={labelStyle} className="mb-4">Social</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              {[
-                { name: "Twitter", url: "https://twitter.com" },
-                { name: "LinkedIn", url: "https://linkedin.com" },
-                { name: "Dribbble", url: "https://dribbble.com" },
-              ].map((social) => (
+            {/* Email block */}
+            <div className="mb-12 md:mb-16">
+              <p className="text-xs uppercase tracking-[0.2em] text-ink-soft mb-3">Email</p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    fontSize: "13px",
-                    fontWeight: 500,
-                    color: "#86868b",
-                    textDecoration: "none",
-                  }}
+                  href="mailto:sravanamcharan20@gmail.com"
+                  className="text-xl md:text-2xl font-medium text-ink hover:text-ink-soft transition-colors"
                 >
-                  {social.name} →
+                  sravanamcharan20@gmail.com
                 </a>
-              ))}
+                <button
+                  onClick={handleCopy}
+                  className={`self-start px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+                    copied
+                      ? "bg-emerald-50 text-emerald-600 ring-1 ring-emerald-200"
+                      : "bg-surface-2 text-ink-soft hover:text-ink ring-1 ring-border"
+                  }`}
+                >
+                  {copied ? <><FiCheck size={12} /> Copied</> : <><FiCopy size={12} /> Copy</>}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div style={{ ...cardBase, padding: "20px" }}>
-            <div style={labelStyle} className="mb-3">Status</div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <span
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "999px",
-                  background: "#34d399",
-                  boxShadow: "0 0 8px #34d399",
-                }}
-              />
-              <span style={{ fontSize: "13px", fontWeight: 500 }}>Available for projects</span>
+            {/* Two-column: Socials + Status */}
+            <div className="grid sm:grid-cols-2 gap-8 md:gap-12 mb-16 md:mb-20">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-ink-soft mb-4">Elsewhere</p>
+                <div className="flex flex-col gap-1">
+                  {socials.map((s) => {
+                    const Icon = s.icon;
+                    return (
+                      <a
+                        key={s.name}
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-between py-2.5 text-ink hover:text-ink-soft transition-colors"
+                      >
+                        <span className="flex items-center gap-3 text-sm font-medium">
+                          <Icon size={16} className="text-ink-soft" />
+                          {s.name}
+                        </span>
+                        <FiArrowUpRight size={14} className="text-ink-soft opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-ink-soft mb-4">Availability</p>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_theme(colors.emerald.400)]" />
+                  <span className="text-sm font-medium text-ink">Open to new projects</span>
+                </div>
+                <p className="text-sm text-ink-soft leading-relaxed">
+                  Based in Bengaluru, India. Open to remote collaboration worldwide.
+                </p>
+              </div>
             </div>
-            <p style={{ fontSize: "12px", color: "#86868b", lineHeight: 1.5 }}>
-              Based in Bengaluru, India. Open to remote work.
-            </p>
+
+            {/* Footer line */}
+            <div className="border-t border-border pt-6 pb-8">
+              <p className="text-xs text-ink-soft/50">&copy; {new Date().getFullYear()} Charan. All rights reserved.</p>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
-    </div>
     </>
   );
 }
