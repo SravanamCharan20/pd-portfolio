@@ -214,7 +214,7 @@ function Index() {
           <div className="relative z-10 -mt-[100vh] pt-[100vh] pb-[40vh] flex flex-col items-center gap-24 md:gap-[80vh] px-6 md:px-16">
             {projects.map((project, i) => {
               const isLink = !!project.href;
-              const Tag: any = isLink ? "a" : "div";
+              const Tag = isLink ? "a" : "div";
               const offsets = ["md:-translate-x-16 lg:-translate-x-84", "md:translate-x-12 lg:translate-x-60", "md:-translate-x-8 lg:-translate-x-54"];
               const offset = offsets[i % offsets.length];
               return (
