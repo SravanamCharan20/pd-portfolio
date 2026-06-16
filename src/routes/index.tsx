@@ -170,7 +170,7 @@ function Index() {
                     <span className="text-emerald-600/80">const</span> charan = {"{"}<br />
                     &nbsp;&nbsp;stack: [<span className="text-amber-600/80">&apos;Figma&apos;</span>, <span className="text-amber-600/80">&apos;React&apos;</span>, <span className="text-amber-600/80">&apos;Tailwind&apos;</span>, <span className="text-amber-600/80">&apos;Framer&apos;</span>],<br />
                     &nbsp;&nbsp;focus: <span className="text-amber-600/80">&apos;product design&apos;</span>,<br />
-                    &nbsp;&nbsp;location: <span className="text-amber-600/80">&apos;Bengaluru, IN&apos;</span>,<br />
+                    &nbsp;&nbsp;location: <span className="text-amber-600/80">&apos;Vishakapatnam IN&apos;</span>,<br />
                     &nbsp;&nbsp;open_to: <span className="text-amber-600/80">&apos;full-time &amp; contract&apos;</span>,<br />
                     &nbsp;&nbsp;status: <span className="text-emerald-600/80">&apos;available&apos;</span><br />
                     {"}"};

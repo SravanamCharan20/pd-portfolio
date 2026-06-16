@@ -164,7 +164,7 @@ function ContactPage() {
                   <span className="text-sm font-medium text-ink">Open to new projects</span>
                 </div>
                 <p className="text-sm text-ink-soft leading-relaxed">
-                  Based in Bengaluru, India. Open to remote collaboration worldwide.
+                  Based in Vishakapatnam,India. Open to remote collaboration worldwide.
                 </p>
               </div>
             </div>

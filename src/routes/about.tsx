@@ -14,8 +14,7 @@ export const Route = createFileRoute("/about")({
 });
 
 const REVEAL_TEXT =
-  "After years of writing code, I realized perfect codebases are fundamentally broken when they never ship. I build for screens that real humans actually touch — fast, opinionated, alive. Let's stop treating dev like a high score game and start shipping things that actually feel alive.";
-
+  "My career began with <span className="code">code</span>. Building products taught me how systems work, how ideas become reality, and how technology solves problems. Along the way, I discovered that what excited me most wasn't just building features—it was shaping the experience behind them."
 function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -407,7 +406,7 @@ function AboutPage() {
                             lineHeight: 1.4,
                           }}
                         >
-                          Bengaluru, IN · Building since 2017
+                          Vishakapatnam IN · Building since 2017
                         </div>
                       </div>
                     </div>
@@ -781,7 +780,7 @@ function MobileAbout() {
                 color: "#6e6e73",
               }}
             >
-              Bengaluru, IN · Building since 2017
+              Vishakapatnam IN · Building since 2017
             </div>
           </div>
         </div>
