@@ -196,7 +196,7 @@ function Index() {
           </div>
 
           {/* Cards that scroll over the title */}
-          <div className="relative z-10 -mt-[100vh] pt-[100vh] pb-[40vh] flex flex-col items-center gap-24 px-6 md:px-16">
+          <div className="relative z-10 -mt-[100vh] pt-[100vh] pb-[40vh] flex flex-col items-center gap-24 md:gap-[80vh] px-6 md:px-16">
             {projects.map((project, i) => {
               const isLink = !!project.href;
               const Tag: any = isLink ? "a" : "div";
