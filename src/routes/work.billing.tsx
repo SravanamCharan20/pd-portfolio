@@ -20,7 +20,6 @@ const sections = [
   { id: "three-endings", label: "Three Endings" },
   { id: "what-broke", label: "What Almost Broke It" },
   { id: "why-matters", label: "Why This Matters" },
-  { id: "design-system", label: "Design System" },
   { id: "honest-gaps", label: "What This Doesn't Solve" },
 ];
 
@@ -551,53 +550,10 @@ function OmakaseCaseStudy() {
               </p>
             </section>
 
-            {/* 07 — DESIGN SYSTEM */}
-            <section ref={setRef("design-system")} id="design-system" className="scroll-mt-24">
-              <div className="mb-8">
-                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">07</span>
-                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">The System Underneath</h2>
-              </div>
-              <p className="text-ink-soft text-lg leading-relaxed mb-8">
-                The visual theme is loosely inspired by Zomato. This isn't a redesign for Zomato — the duel is the feature concept, and Zomato's visual language gave it a familiar roof to live under. Everything sits on a 4pt grid in Figma.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                <div className="rounded-2xl bg-surface p-6">
-                  <p className="text-sm font-medium text-ink mb-3">Colors</p>
-                  <p className="text-ink-soft leading-relaxed">Brand red (#F04F5F), eight-step neutral ramp, semantic tokens — traffic-light rating tiers, delivery, card border.</p>
-                </div>
-                <div className="rounded-2xl bg-surface p-6">
-                  <p className="text-sm font-medium text-ink mb-3">Typography</p>
-                  <p className="text-ink-soft leading-relaxed">Inter, five-step scale: 44 / 34 / 26 / 20 / 16. Revised after on-device testing — what looked right on 720px read small on a real phone.</p>
-                </div>
-                <div className="rounded-2xl bg-surface p-6">
-                  <p className="text-sm font-medium text-ink mb-3">Spacing</p>
-                  <p className="text-ink-soft leading-relaxed">Ten tokens on the 4pt base: 4 / 8 / 12 / 16 / 20 / 24 / 32 / 40 / 48 / 64. Every value snaps to the grid.</p>
-                </div>
-                <div className="rounded-2xl bg-surface p-6">
-                  <p className="text-sm font-medium text-ink mb-3">Layout</p>
-                  <p className="text-ink-soft leading-relaxed">Four-column grid, 16px margins and gutters, 720px canvas. Device-tested overrides: 32px card padding, 32px card radius, 64px VS badge.</p>
-                </div>
-              </div>
-
-              <div className="rounded-2xl bg-surface-2 aspect-[16/6] mb-4 flex items-center justify-center">
-                <p className="text-ink-soft text-sm">Design system images — coming soon</p>
-              </div>
-              <p className="text-sm text-ink-soft mb-8">Color tokens · Typography scale · Spacing ladder</p>
-
-              <h3 className="font-display text-2xl font-medium mb-4 mt-10">Components</h3>
-              <p className="text-ink-soft text-lg leading-relaxed mb-6">
-                Duel card (the whole card is the tap target), buttons (primary / secondary / ghost), rating pill (three tiers), filter pill, status bar, VS badge.
-              </p>
-              <div className="rounded-2xl bg-surface-2 aspect-[16/10] mb-4 flex items-center justify-center">
-                <p className="text-ink-soft text-sm">Component sheet — coming soon</p>
-              </div>
-            </section>
-
             {/* 08 — WHAT THIS DOESN'T SOLVE */}
             <section ref={setRef("honest-gaps")} id="honest-gaps" className="scroll-mt-24">
               <div className="mb-8">
-                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">08</span>
+                <span className="font-display text-4xl sm:text-5xl text-ink-soft/40 block mb-2">07</span>
                 <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight">What This Doesn't Solve</h2>
               </div>
               <p className="text-ink-soft text-lg leading-relaxed mb-6">
