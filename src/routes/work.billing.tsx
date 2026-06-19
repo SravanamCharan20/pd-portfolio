@@ -291,14 +291,28 @@ function OmakaseCaseStudy() {
 
               {/* INTERACTIVE PROTOTYPE — between Solution and Scroll Trap */}
               <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight mt-16 mb-6">Interactive Prototype</h2>
-              <div className="-mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden bg-[#ECEFF1]">
+              {/* Mobile: full-width, natural aspect ratio */}
+              <div className="md:hidden -mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden bg-[#ECEFF1]">
                 <iframe
                   src="/omakase-dc/prototype.html?mode=phone"
                   title="Omakase Duel — Interactive Prototype"
-                  className="border-0 block w-full"
+                  className="border-0 block w-full bg-white"
                   style={{ aspectRatio: "9/20" }}
                   loading="lazy"
                 />
+              </div>
+              {/* Desktop: fixed container, scaled to fit, no scroll */}
+              <div className="hidden md:flex justify-center">
+                <div className="w-[350px] h-[770px] rounded-2xl overflow-hidden shadow-[0_8px_30px_-10px_rgba(0,0,0,0.15)]">
+                  <iframe
+                    src="/omakase-dc/prototype.html?mode=phone"
+                    title="Omakase Duel — Interactive Prototype"
+                    className="border-0 block bg-white"
+                    style={{ width: "440px", height: "1012px", transform: "scale(0.8)", transformOrigin: "top left" }}
+                    scrolling="no"
+                    loading="lazy"
+                  />
+                </div>
               </div>
               <div className="mt-6 rounded-2xl bg-surface p-6 md:p-8">
                 <p className="text-sm font-medium text-ink mb-3 tracking-wider uppercase">How to interact</p>
