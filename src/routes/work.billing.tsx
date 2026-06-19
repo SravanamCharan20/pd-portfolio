@@ -291,12 +291,12 @@ function OmakaseCaseStudy() {
 
               {/* INTERACTIVE PROTOTYPE — between Solution and Scroll Trap */}
               <h2 className="font-display text-4xl md:text-5xl font-medium tracking-tight mt-16 mb-6">Interactive Prototype</h2>
-              <div className="-mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden overflow-y-auto bg-[#ECEFF1]" style={{ height: "min(980px, 85vh)" }}>
+              <div className="-mx-8 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden bg-[#ECEFF1]">
                 <iframe
                   src="/omakase-dc/prototype.html?mode=phone"
                   title="Omakase Duel — Interactive Prototype"
-                  className="h-full border-0"
-                  style={{ width: "100%", minWidth: "375px" }}
+                  className="border-0 block w-full"
+                  style={{ aspectRatio: "9/20" }}
                   loading="lazy"
                 />
               </div>
