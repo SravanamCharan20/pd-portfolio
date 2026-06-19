@@ -406,7 +406,7 @@ function AboutPage() {
                             letterSpacing: "-0.05em",
                           }}
                         >
-                          AS
+                          SC
                         </span>
                       </div>
                       <div style={{ marginTop: pick("22px", "18px", "16px"), position: "relative", zIndex: 1 }}>
@@ -421,7 +421,7 @@ function AboutPage() {
                             lineHeight: 1.05,
                           }}
                         >
-                          Aarav Sharma
+                          Sravanam Charan
                         </div>
                         <div
                           style={{
@@ -431,7 +431,7 @@ function AboutPage() {
                             lineHeight: 1.4,
                           }}
                         >
-                          Vishakapatnam IN · Building since 2017
+                          Vishakapatnam IN · Building since 2023
                         </div>
                       </div>
                     </div>
@@ -481,53 +481,39 @@ function AboutPage() {
                         <div
                           style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(3, 1fr)",
-                            gap: pick("14px", "12px", "10px"),
+                            gridTemplateColumns: "repeat(4, 1fr)",
+                            gap: pick("10px", "8px", "8px"),
                             paddingTop: pick("16px", "14px", "12px"),
                             borderTop: "1px solid rgba(0,0,0,0.06)",
+                            marginTop: "auto",
                           }}
                         >
                           {[
-                            { v: "8+", l: "years" },
-                            { v: "42", l: "shipped" },
-                            { v: "11", l: "awards" },
-                          ].map((s) => (
-                            <div key={s.l}>
-                              <div
-                                style={{
-                                  fontSize: pick("2vw", "26px", "22px"),
-                                  fontWeight: 600,
-                                  letterSpacing: "-0.04em",
-                                  lineHeight: 1,
-                                  background: "linear-gradient(180deg,#1d1d1f,#86868b)",
-                                  WebkitBackgroundClip: "text",
-                                  WebkitTextFillColor: "transparent",
-                                }}
-                              >
-                                {s.v}
-                              </div>
-                              <div style={{ fontSize: pick("0.8vw", "11px", "10px"), color: "#86868b", marginTop: "4px", letterSpacing: "0.04em", textTransform: "uppercase" }}>
-                                {s.l}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div style={{ marginTop: "auto", display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                          {["Figma", "React", "TypeScript", "Motion", "Swift", "Rust"].map((t) => (
-                            <span
-                              key={t}
+                            { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+                            { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+                            { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+                            { name: "Tailwind", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
+                            { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+                            { name: "Swift", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg" },
+                            { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+                            { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+                          ].map((t) => (
+                            <div
+                              key={t.name}
                               style={{
-                                fontSize: pick("12px", "11px", "11px"),
-                                padding: "5px 10px",
-                                borderRadius: "999px",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                gap: "6px",
+                                padding: pick("10px 4px", "8px 4px", "8px 4px"),
+                                borderRadius: pick("14px", "12px", "10px"),
                                 background: "#f5f5f7",
-                                border: "1px solid rgba(0,0,0,0.05)",
-                                color: "#1d1d1f",
+                                border: "1px solid rgba(0,0,0,0.04)",
                               }}
                             >
-                              {t}
-                            </span>
+                              <img src={t.icon} alt={t.name} style={{ width: pick("24px", "20px", "18px"), height: pick("24px", "20px", "18px") }} />
+                              <span style={{ fontSize: pick("10px", "9px", "9px"), color: "#6e6e73", fontWeight: 500 }}>{t.name}</span>
+                            </div>
                           ))}
                         </div>
                       </div>
@@ -540,36 +526,18 @@ function AboutPage() {
                           gap: pick("16px", "14px", "12px"),
                         }}
                       >
-                        <button
-                          style={{
-                            ...cardBase,
-                            padding: pick("20px 22px", "16px 18px", "14px 16px"),
-                            background: "#1d1d1f",
-                            color: "#ffffff",
-                            fontSize: pick("15px", "14px", "13px"),
-                            fontWeight: 600,
-                            border: "none",
-                            cursor: "pointer",
-                            letterSpacing: "-0.01em",
-                            boxShadow: "0 10px 30px -10px rgba(0,0,0,0.4)",
-                          }}
+                        <a
+                          href="/#work"
+                          className="cta-btn-primary"
                         >
-                          View Work  →
-                        </button>
-                        <button
-                          style={{
-                            ...cardBase,
-                            padding: pick("20px 22px", "16px 18px", "14px 16px"),
-                            background: "#ffffff",
-                            color: "#1d1d1f",
-                            fontSize: pick("15px", "14px", "13px"),
-                            fontWeight: 500,
-                            cursor: "pointer",
-                            letterSpacing: "-0.01em",
-                          }}
+                          View Work <span aria-hidden="true">→</span>
+                        </a>
+                        <a
+                          href="/contact"
+                          className="cta-btn-secondary"
                         >
                           Contact me
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -868,64 +836,39 @@ function MobileAbout() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "10px",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "8px",
               paddingTop: "14px",
               borderTop: "1px solid rgba(0,0,0,0.06)",
             }}
           >
             {[
-              { v: "8+", l: "years" },
-              { v: "42", l: "shipped" },
-              { v: "11", l: "awards" },
-            ].map((s) => (
-              <div key={s.l}>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: 600,
-                    letterSpacing: "-0.04em",
-                    lineHeight: 1,
-                    background: "linear-gradient(180deg,#1d1d1f,#86868b)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  {s.v}
-                </div>
-                <div
-                  style={{
-                    fontSize: "10px",
-                    color: "#86868b",
-                    marginTop: "4px",
-                    letterSpacing: "0.04em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {s.l}
-                </div>
+              { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+              { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+              { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+              { name: "Tailwind", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
+              { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+              { name: "Swift", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg" },
+              { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+              { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+            ].map((t) => (
+              <div
+                key={t.name}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "5px",
+                  padding: "8px 4px",
+                  borderRadius: "10px",
+                  background: "#f5f5f7",
+                  border: "1px solid rgba(0,0,0,0.04)",
+                }}
+              >
+                <img src={t.icon} alt={t.name} style={{ width: "18px", height: "18px" }} />
+                <span style={{ fontSize: "9px", color: "#6e6e73", fontWeight: 500 }}>{t.name}</span>
               </div>
             ))}
-          </div>
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-            {["Figma", "React", "TypeScript", "Motion", "Swift", "Rust"].map(
-              (t) => (
-                <span
-                  key={t}
-                  style={{
-                    fontSize: "11px",
-                    padding: "5px 10px",
-                    borderRadius: "999px",
-                    background: "#f5f5f7",
-                    border: "1px solid rgba(0,0,0,0.05)",
-                    color: "#1d1d1f",
-                  }}
-                >
-                  {t}
-                </span>
-              ),
-            )}
           </div>
         </div>
 
@@ -937,36 +880,12 @@ function MobileAbout() {
             gap: "12px",
           }}
         >
-          <button
-            style={{
-              ...cardBase,
-              padding: "16px",
-              background: "#1d1d1f",
-              color: "#ffffff",
-              fontSize: "14px",
-              fontWeight: 600,
-              border: "none",
-              cursor: "pointer",
-              letterSpacing: "-0.01em",
-              boxShadow: "0 10px 30px -10px rgba(0,0,0,0.4)",
-            }}
-          >
-            View Work →
-          </button>
-          <button
-            style={{
-              ...cardBase,
-              padding: "16px",
-              background: "#ffffff",
-              color: "#1d1d1f",
-              fontSize: "14px",
-              fontWeight: 500,
-              cursor: "pointer",
-              letterSpacing: "-0.01em",
-            }}
-          >
+          <a href="/#work" className="cta-btn-primary">
+            View Work <span aria-hidden="true">→</span>
+          </a>
+          <a href="/contact" className="cta-btn-secondary">
             Contact me
-          </button>
+          </a>
         </div>
       </div>
     </div>

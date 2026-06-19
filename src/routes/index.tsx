@@ -235,12 +235,12 @@ function Index() {
                     <h3 className="font-display text-2xl md:text-3xl font-semibold text-white mb-3 tracking-tight">{project.title}</h3>
                     <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-lg mb-6">{project.summary}</p>
                     {isLink && (
-                      <span className="inline-flex items-center gap-2 bg-white text-black text-sm font-medium px-5 py-2.5 rounded-full w-fit transition-transform duration-300 group-hover:translate-y-0">
-                        View case study
+                      <span className="inline-flex items-center gap-1.5 bg-white text-black text-sm font-semibold px-5 py-2.5 rounded-full w-fit shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)]">
+                        View case study <span aria-hidden="true">→</span>
                       </span>
                     )}
                     {!isLink && (
-                      <span className="inline-flex items-center gap-2 text-white/60 text-sm font-medium px-5 py-2.5 rounded-full border border-white/20 w-fit">
+                      <span className="inline-flex items-center gap-1.5 text-white/50 text-sm font-medium px-5 py-2.5 rounded-full border border-white/15 w-fit">
                         In progress
                       </span>
                     )}
