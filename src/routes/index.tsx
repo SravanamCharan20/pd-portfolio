@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { FiCopy, FiExternalLink, FiCheck } from "react-icons/fi";
 import { FaBehance, FaDribbble, FaMedium, FaLinkedin } from "react-icons/fa6";
 import heroLandscape from "@/assets/hero-landscape.jpg";
-import p1 from "@/assets/project-1.jpg";
-import p2 from "@/assets/project-2.jpg";
-import p4 from "@/assets/project-4.jpg";
+import p1 from "@/assets/omakase-coverpage.png";
+import p2 from "@/assets/project-4.jpg";
+import p4 from "@/assets/ttd-casestudy-coverpage.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,17 +38,7 @@ const projects = [
     eyebrow: "Service design · Mobile UX",
     summary: "A calmer booking flow for a high-stress civic service, designed around clarity, timing, and trust.",
     contribution: "End-to-end product design",
-  },
-  {
-    title: "Maison",
-    year: "2025",
-    img: p2,
-    role: "Brand & Product",
-    href: undefined,
-    eyebrow: "Brand direction · Product",
-    summary: "An ongoing brand-to-product exploration shaped around mood, texture, and quiet luxury.",
-    contribution: "Brand direction, interface concepts",
-  },
+  }
 ];
 
 function Index() {
@@ -204,7 +194,7 @@ function Index() {
         <section id="work" className="relative">
           {/* Sticky "Featured work" background */}
           <div className="sticky top-0 h-screen flex flex-col items-center justify-center pointer-events-none select-none z-0">
-            <h2 className="font-display font-light text-[14vw] md:text-[12vw] leading-none tracking-[-0.08em] text-ink">
+            <h2 className="text-[12vw] font-extralight tracking-tight text-foreground leading-none">
               Featured work
             </h2>
             <p className="mt-4 text-sm uppercase tracking-[0.2em] text-ink-soft">(Scroll to explore)</p>
@@ -227,13 +217,13 @@ function Index() {
                     src={project.img}
                     alt={project.title}
                     loading="lazy"
-                    className="block w-full aspect-[4/3] object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    className="block w-full aspect-[16/10] object-cover transition-transform duration-700 ease-out md:group-hover:scale-105"
                   />
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 md:p-10">
+                  {/* Desktop hover overlay */}
+                  <div className="hidden md:flex absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex-col justify-end p-10">
                     <p className="text-white/70 text-sm uppercase tracking-[0.16em] mb-2">{project.eyebrow}</p>
-                    <h3 className="font-display text-2xl md:text-3xl font-semibold text-white mb-3 tracking-tight">{project.title}</h3>
-                    <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-lg mb-6">{project.summary}</p>
+                    <h3 className="font-display text-3xl font-semibold text-white mb-3 tracking-tight">{project.title}</h3>
+                    <p className="text-white/80 text-base leading-relaxed max-w-lg mb-6">{project.summary}</p>
                     {isLink && (
                       <span className="inline-flex items-center gap-1.5 bg-white text-black text-sm font-semibold px-5 py-2.5 rounded-full w-fit shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)]">
                         View case study <span aria-hidden="true">→</span>
@@ -241,6 +231,22 @@ function Index() {
                     )}
                     {!isLink && (
                       <span className="inline-flex items-center gap-1.5 text-white/50 text-sm font-medium px-5 py-2.5 rounded-full border border-white/15 w-fit">
+                        In progress
+                      </span>
+                    )}
+                  </div>
+                  {/* Mobile info below image */}
+                  <div className="md:hidden p-5">
+                    <p className="text-ink-soft text-xs uppercase tracking-[0.16em] mb-1.5">{project.eyebrow}</p>
+                    <h3 className="font-display text-lg font-semibold text-ink mb-2 tracking-tight">{project.title}</h3>
+                    <p className="text-ink-soft text-sm leading-relaxed mb-4">{project.summary}</p>
+                    {isLink && (
+                      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink">
+                        View case study <span aria-hidden="true">→</span>
+                      </span>
+                    )}
+                    {!isLink && (
+                      <span className="inline-flex items-center gap-1.5 text-ink-soft text-sm font-medium">
                         In progress
                       </span>
                     )}
