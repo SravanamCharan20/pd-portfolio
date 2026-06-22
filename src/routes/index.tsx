@@ -115,79 +115,30 @@ function Index() {
           <a href="/contact" className="px-4 py-1.5 rounded-full text-[13px] font-medium text-ink/60 hover:text-ink/90 hover:bg-black/[0.06] transition-all duration-200">Contact</a>
         </nav>
 
-        <section className="hero">
-          <div className="hero-shell hero__stage">
-            <div className="hero__lead hero-stagger" style={{ '--d': '0.1s' } as React.CSSProperties}>
-              <h1 className="hero__headline">
-                Designing
-                <br />
-                digital products
-                <br />
-                that feel human.
-              </h1>
-            </div>
-
-            <div className="hero__collage">
-              <div className="hero__note" aria-hidden="true">
-                <ul className="hero__note-list">
-                  <li>Clarity</li>
-                  <li>Curiosity</li>
-                  <li>Empathy</li>
-                  <li>Impact</li>
-                </ul>
-                <span className="hero__note-line" />
-              </div>
-
-              <figure className="hero__photo">
-                <span className="hero__tape" aria-hidden="true" />
-                <div className="hero__photo-frame">
-                  <img
-                    src={heroLandscape}
-                    alt="Misty mountain landscape"
-                    className="hero__photo-img"
-                  />
-                </div>
-              </figure>
-            </div>
-
-            <aside className="hero__aside hero-stagger" style={{ '--d': '0.4s' } as React.CSSProperties}>
-              <div className="group/bio relative">
-                <p className="hero__bio transition-opacity duration-500 group-hover/bio:opacity-0">
-                  I&apos;m a product designer who loves turning complex problems into simple, meaningful experiences. Currently shaping products and helping ideas come to life.
-                </p>
-                <div className="absolute inset-0 opacity-0 group-hover/bio:opacity-100 transition-all duration-500 pointer-events-none">
-                  <p className="text-[0.6875rem] font-mono leading-relaxed text-ink-soft/70 tracking-wide">
-                    <span className="text-emerald-600/80">const</span> charan = {"{"}<br />
-                    &nbsp;&nbsp;stack: [<span className="text-amber-600/80">&apos;Figma&apos;</span>, <span className="text-amber-600/80">&apos;React&apos;</span>, <span className="text-amber-600/80">&apos;Tailwind&apos;</span>, <span className="text-amber-600/80">&apos;Framer&apos;</span>],<br />
-                    &nbsp;&nbsp;focus: <span className="text-amber-600/80">&apos;product design&apos;</span>,<br />
-                    &nbsp;&nbsp;location: <span className="text-amber-600/80">&apos;Vishakapatnam IN&apos;</span>,<br />
-                    &nbsp;&nbsp;open_to: <span className="text-amber-600/80">&apos;full-time &amp; contract&apos;</span>,<br />
-                    &nbsp;&nbsp;status: <span className="text-emerald-600/80">&apos;available&apos;</span><br />
-                    {"}"};
-                  </p>
-                </div>
-              </div>
-              <p className="hero__cta">Let&apos;s create something great together.</p>
-              <svg className="hero__arrow" viewBox="0 0 300 20" fill="none" aria-hidden="true">
-                <path
-                  d="M2 12C34 10 66 14 98 11C130 8 162 13 194 10C226 7 258 12 290 10"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  className="hero-arrow-line"
-                />
-                <path
-                  d="M282 5L296 10L282 15"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="hero-arrow-head"
-                />
-              </svg>
-            </aside>
+        <section className="hero-sky">
+          {/* Floating cloud shapes */}
+          <div className="hero-sky__clouds" aria-hidden="true">
+            <div className="hero-sky__cloud hero-sky__cloud--1" />
+            <div className="hero-sky__cloud hero-sky__cloud--2" />
+            <div className="hero-sky__cloud hero-sky__cloud--3" />
+            <div className="hero-sky__cloud hero-sky__cloud--4" />
           </div>
 
+          {/* Floating orb */}
+          <div className="hero-sky__orb" aria-hidden="true" />
+
+          <div className="hero-sky__content">
+            <h1 className="hero-sky__name hero-sky-anim" style={{ '--d': '0.1s' } as React.CSSProperties}>
+              CHARAN
+            </h1>
+            <p className="hero-sky__role hero-sky-anim" style={{ '--d': '0.35s' } as React.CSSProperties}>
+              Product Designer
+            </p>
+          </div>
+
+          <div className="hero-sky__scroll hero-sky-anim" style={{ '--d': '0.7s' } as React.CSSProperties}>
+            <span className="hero-sky__scroll-line" />
+          </div>
         </section>
 
         {/* WORK — sticky title + scrolling cards */}
