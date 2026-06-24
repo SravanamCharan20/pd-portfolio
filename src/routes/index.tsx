@@ -3,7 +3,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import React, { useState } from "react";
 import { FiCopy, FiExternalLink, FiCheck } from "react-icons/fi";
 import { FaBehance, FaDribbble, FaMedium, FaLinkedin } from "react-icons/fa6";
-import heroLandscape from "@/assets/hero-landscape.jpg";
 import p1 from "@/assets/omakase-coverpage.png";
 import p2 from "@/assets/project-4.jpg";
 import p4 from "@/assets/ttd-casestudy-coverpage.png";
